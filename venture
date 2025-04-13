@@ -1,15 +1,1 @@
-if not game:IsLoaded() then
-    game.Loaded:Wait()
-end
-print("Here")
-local creator = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Creator.CreatorTargetId
-
-local games = {
-    [16732694052] = 'https://raw.githubusercontent.com/VENTURES1MS/loader/refs/heads/main/GamesData/Fisch.lua'
-}
-
-if games[creator] then
-    loadstring(game:HttpGet(games[creator]))()
-else
-    warn("Unsupported game")
-end
+loadstring(game:HttpGet("https://raw.githubusercontent.com/VENTURES1MS/loader/refs/heads/main/GamesData/Fisch.lua", true))()
