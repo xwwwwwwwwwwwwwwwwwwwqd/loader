@@ -1,11 +1,11 @@
 local Players = game:GetService("Players")
 
 local scripts = {
-    [16732694052] = "https://raw.githubusercontent.com/VENTURES1MS/loader/refs/heads/main/GamesData/Fisch.lua",
-    [87039211657390] = "https://raw.githubusercontent.com/VENTURES1MS/loader/main/scripts/GameB.lua",
+    ["16732694052"] = "https://raw.githubusercontent.com/VENTURES1MS/loader/refs/heads/main/GamesData/Fisch.lua",
+    ["87039211657390"] = "https://raw.githubusercontent.com/VENTURES1MS/loader/main/scripts/GameB.lua",
 }
 
-local placeId = game.PlaceId
+local placeId = tostring(game.PlaceId)
 local scriptUrl = scripts[placeId]
 
 if scriptUrl then
