@@ -1,3 +1,5 @@
+local Players = game:GetService("Players")
+
 local scripts = {
     [16732694052] = "https://raw.githubusercontent.com/VENTURES1MS/loader/refs/heads/main/GamesData/Fisch.lua",
     [87039211657390] = "https://raw.githubusercontent.com/VENTURES1MS/loader/main/scripts/GameB.lua",
@@ -9,5 +11,5 @@ local scriptUrl = scripts[placeId]
 if scriptUrl then
     loadstring(game:HttpGet(scriptUrl))()
 else
-    game.Players.LocalPlayer:Kick("Game not supported by this script.")
+    Players.LocalPlayer:Kick("Game not supported by this script.")
 end
