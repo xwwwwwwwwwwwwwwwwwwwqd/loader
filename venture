@@ -1,15 +1,15 @@
-local Players = game:GetService("Players")
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+print("Here")
+local creator = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Creator.CreatorTargetId
 
-local scripts = {
-    [16732694052] = "https://raw.githubusercontent.com/VENTURES1MS/loader/refs/heads/main/GamesData/Fisch.lua",
-    [87039211657390] = "https://raw.githubusercontent.com/VENTURES1MS/loader/main/scripts/GameB.lua",
+local games = {
+    [16732694052] = 'https://raw.githubusercontent.com/VENTURES1MS/loader/refs/heads/main/GamesData/Fisch.lua'
 }
 
-local placeId = tostring(game.PlaceId)
-local scriptUrl = scripts[placeId]
-
-if scriptUrl then
-    loadstring(game:HttpGet(scriptUrl))()
+if games[creator] then
+    loadstring(game:HttpGet(games[creator]))()
 else
-    Players.LocalPlayer:Kick("Game not supported by this script.")
+    warn("Unsupported game")
 end
