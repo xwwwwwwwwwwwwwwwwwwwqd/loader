@@ -1,21 +1,8 @@
-if not game:IsLoaded() then
-    game.Loaded:Wait()
+local GameId = game.GameId
+if GameId == 16732694052 then
+  loadstring(game:HttpGet("https://raw.githubusercontent.com/x2zu/loader/refs/heads/main/GamesData/Fisch.lua"))()
+elseif GameId == 7314989375 then
+  loadstring(game:HttpGet("https://raw.githubusercontent.com/x2zu/loader/refs/heads/main/GamesData/Fisch.lua"))()
+elseif GameId == 7095682825 then
+  loadstring(game:HttpGet("https://raw.githubusercontent.com/x2zu/loader/refs/heads/main/GamesData/Fisch.lua"))()
 end
-
-local MarketplaceService = game:GetService("MarketplaceService")
-local creator = MarketplaceService:GetProductInfo(game.PlaceId).Creator.CreatorTargetId
-
-local games = {
-    [16732694052] = "https://raw.githubusercontent.com/VENTURES1MS/loader/refs/heads/main/GamesData/Fisch.lua",
-    [3333298] = "https://raw.githubusercontent.com/VENTURES1MS/loader/refs/heads/main/GamesData/BeaksKAVO.lua",
-}
-
-local function executeScript()
-    if games[creator] then
-        loadstring(game:HttpGet(games[creator]))()
-    else
-        warn("This game doesnt support this script!")
-    end
-end
-
-executeScript()
