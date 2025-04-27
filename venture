@@ -1,12 +1,1 @@
-local GameId = game.GameId
-
-if GameId == 16732694052 then
-  warning("Loading script for GameId: 16732694052")
   loadstring(game:HttpGet("https://raw.githubusercontent.com/x2zu/loader/refs/heads/main/GamesData/Fisch.lua"))()
-elseif GameId == 7314989375 then
-  warning("Loading script for GameId: 7314989375")
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/x2zu/loader/refs/heads/main/GamesData/Fisch.lua"))()
-elseif GameId == 7095682825 then
-  warning("Loading script for GameId: 7095682825")
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/x2zu/loader/refs/heads/main/GamesData/Fisch.lua"))()
-end
