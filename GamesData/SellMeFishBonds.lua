@@ -150,30 +150,6 @@ getgenv().settings = {
     heightOffset = 5
 }
 
--- Slider untuk kecepatan putaran
-Main:AddSlider("SpinSpeedSlider", {
-    Title = "Spin Speed",
-    Description = "Adjust spin speed while attacking",
-    Min = 1,
-    Max = 20,
-    Default = settings.spinSpeed,
-    Rounding = 1
-}):OnChanged(function(value)
-    settings.spinSpeed = value
-end)
-
--- Slider untuk ketinggian saat berputar
-Main:AddSlider("HeightOffsetSlider", {
-    Title = "Spin Height",
-    Description = "Adjust flying height while spinning around mobs",
-    Min = 2,
-    Max = 20,
-    Default = settings.heightOffset,
-    Rounding = 1
-}):OnChanged(function(value)
-    settings.heightOffset = value
-end)
-
 -- Fungsi spiral ke target
 local function spiralToTarget(target)
     local radius = 10
