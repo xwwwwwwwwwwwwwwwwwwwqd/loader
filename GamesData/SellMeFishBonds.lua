@@ -124,16 +124,8 @@ local Main = Window:AddTab({ Title = "General", Icon = "rbxassetid://10734966248
 local Misc = Window:AddTab({Title = "Misc", Icon = "rbxassetid://10734976739"})
 local Settings = Window:AddTab({Title = "Settings", Icon = "rbxassetid://10734950020"})
 local Options = StellarLibrary.Options
-
-task.spawn(function()
-    wait(0.5)
-    StellarLibrary:Notify({
-        Title = "Stellar",
-        Content = "The script has been loaded successfully!",
-        Duration = 4
-    })
-end)
 local MainLeft = Main:AddSection({ Title = "Farm" })
+
 local replicated_storage = cloneref(game:GetService("ReplicatedStorage"))
 local workspace = cloneref(game:GetService("Workspace"))
 local enemies = workspace:FindFirstChild("Mobs")
@@ -145,34 +137,9 @@ end
 
 getgenv().settings = {
     enabled = false,
-    delay = 2,
     spinSpeed = 5,
     heightOffset = 5
 }
-
--- Slider untuk kecepatan putaran
-MainLeft:AddSlider("SpinSpeedSlider", {
-    Title = "Spin Speed",
-    Description = "Adjust spin speed while attacking",
-    Min = 1,
-    Max = 20,
-    Default = settings.spinSpeed,
-    Rounding = 1
-}):OnChanged(function(value)
-    settings.spinSpeed = value
-end)
-
--- Slider untuk ketinggian saat berputar
-MainLeft:AddSlider("HeightOffsetSlider", {
-    Title = "Spin Height",
-    Description = "Adjust flying height while spinning around mobs",
-    Min = 2,
-    Max = 20,
-    Default = settings.heightOffset,
-    Rounding = 1
-}):OnChanged(function(value)
-    settings.heightOffset = value
-end)
 
 -- Fungsi spiral ke target
 local function spiralToTarget(target)
@@ -187,7 +154,6 @@ local function spiralToTarget(target)
         local offsetX = math.cos(angle) * radius
         local offsetZ = math.sin(angle) * radius
         local height = settings.heightOffset
-        local targetPos = target.Position + Vector3.new(offsetX, height, offsetZ)
 
         HRP().CFrame = CFrame.new(HRP().Position, target.Position) * CFrame.new(offsetX, height, offsetZ)
         HRP().Velocity = Vector3.new(0, 0, 0)
