@@ -1,648 +1,224 @@
-repeat task.wait() until game:IsLoaded()
-repeat task.wait() until game.Players.LocalPlayer:FindFirstChild("PlayerGui")
- 
-local Fluent = loadstring(Game:HttpGet("https://raw.githubusercontent.com/discoart/FluentPlus/refs/heads/main/release.lua", true))() 
 
+-- Ads
+local ScreenGui = Instance.new("ScreenGui")
+local AdFrame = Instance.new("Frame")
+local DiscordLabel = Instance.new("TextLabel")
+local CopyButton = Instance.new("TextButton")
+local ExitButton = Instance.new("TextButton")
+local WaitButton = Instance.new("TextButton")
+local UIGradientFrame = Instance.new("UIGradient")
+local UIGradientText = Instance.new("UIGradient")
+ScreenGui.Name = "AdsGui"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
 
+AdFrame.Name = "AdFrame"
+AdFrame.Parent = ScreenGui
+AdFrame.Size = UDim2.new(0.4, 0, 0.3, 0)
+AdFrame.Position = UDim2.new(0.5, 0, 0.35, 0)
+AdFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+AdFrame.BorderSizePixel = 2
+AdFrame.Draggable = true
+AdFrame.Active = true
+AdFrame.BorderColor3 = Color3.fromRGB(0, 0, 139) -- Biru Gelap
 
-local Window = Fluent:CreateWindow({
-    Title = "Dead Rails",
-    SubTitle = "Feito por Lucas",
-    TabWidth = 160,
-    Size = UDim2.fromOffset(500, 350),
-    Acrylic = false,
-    Theme = "Dark",
-    Center = true,
-    IsDraggable = true
-})
+-- Gradient untuk Background AdFrame
+UIGradientFrame.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), -- Putih di atas
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 139)) -- Biru Gelap di bawah
+}
+UIGradientFrame.Parent = AdFrame
 
+DiscordLabel.Name = "DiscordLabel"
+DiscordLabel.Parent = AdFrame
+DiscordLabel.Size = UDim2.new(1, 0, 0.6, 0)
+DiscordLabel.BackgroundTransparency = 1
+DiscordLabel.Text = "Stellar"
+DiscordLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+DiscordLabel.TextSize = 22
+DiscordLabel.TextWrapped = true
 
-if getgenv().teste then
-    local Tab = Window:AddTab({ Title = "testes", Icon = "home" })
+UIGradientText.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), -- Putih di atas
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(70, 130, 180)), -- Gradasi Biru Muda
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 139)) -- Biru Gelap di bawah
+}
+UIGradientText.Parent = DiscordLabel
 
-    local defaultTpPos = Vector3.new(100, 10, 200)
-    local currentTpPos = defaultTpPos
+CopyButton.Name = "CopyButton"
+CopyButton.Parent = AdFrame
+CopyButton.Size = UDim2.new(0.4, 0, 0.2, 0)
+CopyButton.Position = UDim2.new(0.1, 0, 0.7, 0)
+CopyButton.Text = "Copy Link Discord"
+CopyButton.BackgroundColor3 = Color3.fromRGB(0, 0, 139) -- Biru Gelap
+CopyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-    Tab:AddButton({
-        Title = "Teleportar",
-        Description = "Tp normal",
-        Callback = function()
-            local char = game.Players.LocalPlayer.Character
-            if char and char:FindFirstChild("HumanoidRootPart") then
-                char:MoveTo(currentTpPos)
-            end
-        end
+ExitButton.Name = "ExitButton"
+ExitButton.Parent = AdFrame
+ExitButton.Size = UDim2.new(0.4, 0, 0.2, 0)
+ExitButton.Position = UDim2.new(0.5, 0, 0.7, 0)
+ExitButton.Text = "Exit"
+ExitButton.Visible = false
+ExitButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+ExitButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- Putih
+
+WaitButton.Name = "WaittoExit"
+WaitButton.Parent = AdFrame
+WaitButton.Size = UDim2.new(0.4, 0, 0.2, 0)
+WaitButton.Position = UDim2.new(0.5, 0, 0.7, 0)
+WaitButton.Text = "Waitting Delay Exit"
+WaitButton.Visible = true
+WaitButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+WaitButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- Putih
+
+task.delay(5, function()
+    WaitButton.Visible = false
+    ExitButton.Visible = true
+end)
+
+CopyButton.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard("https://discord.com/invite/eTVvgvRq4s")
+        task.wait()
+        CopyButton.Text = "Copied To Discord Link"
+        task.wait(0.6)
+        CopyButton.Text = "Copy Link Discord"
+    end
+end)
+
+ExitButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+-- Services
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local GuiService = game:GetService("GuiService")
+local UserInputService = game:GetService("UserInputService")
+
+-- Player Setup
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local Backpack = LocalPlayer:WaitForChild("Backpack")
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+local StellarLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/x2zu/loader/refs/heads/main/VentureData/StellarUI.lua"))()
+
+local Window = StellarLibrary:CreateWindow({Title = "Stellar"})
+
+print([[  
+  ∧,,,∧
+(  ̳• · • ̳)
+/    づ You want my heart? Don't skid please :D
+  ∧,,,∧
+(  ̳• · • ̳)
+/    づ♡ Ok here's my heart
+
+🟢 Successfully Loaded!
+]])
+local Main = Window:AddTab({ Title = "General", Icon = "rbxassetid://10734966248" })
+local Misc = Window:AddTab({Title = "Misc", Icon = "rbxassetid://10734976739"})
+local Settings = Window:AddTab({Title = "Settings", Icon = "rbxassetid://10734950020"})
+local Options = StellarLibrary.Options
+
+task.spawn(function()
+    wait(0.5)
+    StellarLibrary:Notify({
+        Title = "Stellar",
+        Content = "The script has been loaded successfully!",
+        Duration = 4
     })
+end)
 
-    Tab:AddButton({
-        Title = "Tp Spawn",
-        Description = "Define o local atual como novo TP",
-        Callback = function()
-            local char = game.Players.LocalPlayer.Character
-            if char and char:FindFirstChild("HumanoidRootPart") then
-                currentTpPos = char.HumanoidRootPart.Position
-            end
-        end
-    })
-
-    Tab:AddButton({
-        Title = "Reset Tp",
-        Description = "Volta o TP para o padrão",
-        Callback = function()
-            currentTpPos = defaultTpPos
-        end
-    })
-
-    Tab:AddSlider("Slider", {
-        Title = "Velocidade",
-        Default = 16,
-        Min = 10,
-        Max = 150,
-        Rounding = 1,
-        Callback = function(Value)
-            local char = game.Players.LocalPlayer.Character
-            if char and char:FindFirstChildOfClass("Humanoid") then
-                char:FindFirstChildOfClass("Humanoid").WalkSpeed = Value
-            end
-        end
-    })
-
-    local flying = false
-    local RS = game:GetService("RunService")
-    local speed = 3
-    local bv, bg, char, hrp, humanoid
-
-    Tab:AddToggle("FlyToggle", {
-        Title = "Fly (Analógico Mobile)",
-        Default = false,
-        Callback = function(state)
-            flying = state
-            char = game.Players.LocalPlayer.Character
-            if not char or not char:FindFirstChild("HumanoidRootPart") then return end
-            hrp = char:FindFirstChild("HumanoidRootPart")
-            humanoid = char:FindFirstChildWhichIsA("Humanoid")
-            if flying then  
-                bv = Instance.new("BodyVelocity")  
-                bv.Velocity = Vector3.zero  
-                bv.MaxForce = Vector3.new(1e9, 1e9, 1e9)  
-                bv.Parent = hrp  
-                bg = Instance.new("BodyGyro")  
-                bg.MaxTorque = Vector3.new(1e9, 1e9, 1e9)  
-                bg.CFrame = hrp.CFrame  
-                bg.Parent = hrp  
-
-                humanoid.PlatformStand = true  
-
-                RS:BindToRenderStep("Fly", Enum.RenderPriority.Input.Value, function()  
-                    local cam = workspace.CurrentCamera  
-                    local moveDir = humanoid.MoveDirection  
-
-                    if moveDir.Magnitude > 0 then  
-                        bv.Velocity = cam.CFrame:VectorToWorldSpace(moveDir.Unit * speed)  
-                    else  
-                        bv.Velocity = Vector3.zero  
-                    end  
-
-                    bg.CFrame = cam.CFrame  
-                end)  
-            else  
-                RS:UnbindFromRenderStep("Fly")  
-                if bv then bv:Destroy() end  
-                if bg then bg:Destroy() end  
-                if humanoid then humanoid.PlatformStand = false end  
-            end  
-        end
-    })
-
-    -- repeat task.wait() until game:IsLoaded()
-
-    local bondLabel
-    pcall(function()
-        bondLabel = game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("BondGui"):WaitForChild("BondInfo"):WaitForChild("BondCount")
-    end)
-
-    Tab:AddParagraph({
-        Title = "Seu Bond:",
-        Content = bondLabel and bondLabel.Text or "N/A"
-    })
- 
-    -- eterna linha 116 (sempre ficar na linha 127)
+local replicated_storage = cloneref(game:GetService("ReplicatedStorage"))
+local workspace = cloneref(game:GetService("Workspace"))
+local enemies = workspace:FindFirstChild("Mobs")
+local Players = cloneref(game:GetService("Players"))
+local LocalPlayer = Players.LocalPlayer
+local HRP = function()
+    return LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 end
 
-            
-local main = Window:AddTab({
-  Title = "main",
-  Icon = "home"
- })
+getgenv().settings = {
+    enabled = false,
+    delay = 2,
+    spinSpeed = 5,
+    heightOffset = 5
+}
 
-local Section = main:AddSection("auto collect/use")
+-- Slider untuk kecepatan putaran
+Main:AddSlider("SpinSpeedSlider", {
+    Title = "Spin Speed",
+    Description = "Adjust spin speed while attacking",
+    Min = 1,
+    Max = 20,
+    Default = settings.spinSpeed,
+    Rounding = 1
+}):OnChanged(function(value)
+    settings.spinSpeed = value
+end)
 
+-- Slider untuk ketinggian saat berputar
+Main:AddSlider("HeightOffsetSlider", {
+    Title = "Spin Height",
+    Description = "Adjust flying height while spinning around mobs",
+    Min = 2,
+    Max = 20,
+    Default = settings.heightOffset,
+    Rounding = 1
+}):OnChanged(function(value)
+    settings.heightOffset = value
+end)
 
+-- Fungsi spiral ke target
+local function spiralToTarget(target)
+    local radius = 10
+    local angle = 0
 
-main:AddToggle("AutoCollectToggle", {
-    Title = "Auto Collect",
-    Description = "Coleta automaticamente os itens do chão (em desenvolvimento)",
-    Default = false,
-    Callback = function(state)
-        autoCollectRunning = state
+    while target and target.Parent and settings.enabled do
+        if not HRP() then break end
 
-        if state then
-            local function collectItems()
-                if not workspace:FindFirstChild("RuntimeItems") then return end
+        angle = angle + settings.spinSpeed * task.wait()
 
-                local items = {
-                    workspace.RuntimeItems:FindFirstChild("Rifle"),
-                    workspace.RuntimeItems:FindFirstChild("RifleAmmo"),
-                    workspace.RuntimeItems:FindFirstChild("Bandage"),
-                    workspace.RuntimeItems:FindFirstChild("Shotgun"),
-                    workspace.RuntimeItems:FindFirstChild("Revolver"),
-                    workspace.RuntimeItems:FindFirstChild("ShotgunShells"),
-                    workspace.RuntimeItems:FindFirstChild("Molotov"),
-                    workspace.RuntimeItems:FindFirstChild("RevolverAmmo"),
-                    workspace.RuntimeItems:FindFirstChild("Mauser"),
-                    workspace.RuntimeItems:FindFirstChild("Snake Oil"),
-                    workspace.RuntimeItems:FindFirstChild("Shovel"),
-                    workspace.RuntimeItems:FindFirstChild("OpenableCrate"),
-                    workspace.RuntimeItems:FindFirstChild("Navy Revolver"),
-                    workspace.RuntimeItems:FindFirstChild("Bolt Action Rifle"),
-                    workspace.RuntimeItems:FindFirstChild("Holy Water"),
-                    workspace.RuntimeItems:FindFirstChild("Electrocutioner"),
-                    workspace.RuntimeItems:FindFirstChild("Vampire Knife")
-                }
+        local offsetX = math.cos(angle) * radius
+        local offsetZ = math.sin(angle) * radius
+        local height = settings.heightOffset
+        local targetPos = target.Position + Vector3.new(offsetX, height, offsetZ)
 
-                local rs = game:GetService("ReplicatedStorage")
-                local pickUpRemote = rs:FindFirstChild("Remotes") and rs.Remotes:FindFirstChild("Tool") and rs.Remotes.Tool:FindFirstChild("PickUpTool")
-                local activateRemote = rs:FindFirstChild("Packages") and rs.Packages:FindFirstChild("RemotePromise") and rs.Packages.RemotePromise.Remotes:FindFirstChild("C_ActivateObject")
+        HRP().CFrame = CFrame.new(HRP().Position, target.Position) * CFrame.new(offsetX, height, offsetZ)
+        HRP().Velocity = Vector3.new(0, 0, 0)
 
-                if not pickUpRemote or not activateRemote then return end
+        replicated_storage:WaitForChild("Systems"):WaitForChild("Combat"):WaitForChild("PlayerAttack"):FireServer({target})
 
-                for _, item in pairs(items) do
-                    if item then
-                        local args = { item }
-                        pickUpRemote:FireServer(unpack(args))
-                        activateRemote:FireServer(unpack(args))
+        if target:FindFirstChild("Humanoid") and target.Humanoid.Health <= 0 then
+            break
+        end
+    end
+end
+
+-- Toggle Kill Aura
+Main:AddToggle("killAuraToggle", {
+    Title = "Kill Aura",
+    Description = "Automatically fly and spiral to all mobs",
+    Default = false
+}):OnChanged(function(value)
+    settings.enabled = value
+    if value then
+        task.spawn(function()
+            while settings.enabled do
+                for _, mob in ipairs(enemies:GetChildren()) do
+                    if not settings.enabled then break end
+                    if mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
+                        spiralToTarget(mob.HumanoidRootPart or mob.PrimaryPart)
+                        task.wait(0.1)
                     end
                 end
-            end
-
-            task.spawn(function()
-                while autoCollectRunning do
-                    task.wait(0.4)
-                    pcall(collectItems)
-                end
-            end)
-        end
-    end
-})
-
-
-
-local bondRunning = false
-
-main:AddToggle("ActivateBondToggle", {
-    Title = "collect bonds (perto de você)",
-    Description = "Coleta bonds proximos a você",
-    Default = false,
-    Callback = function(state)
-        bondRunning = state
-
-        if state then
-            task.spawn(function()
-                while bondRunning do
-                    local bond = workspace:FindFirstChild("RuntimeItems") and workspace.RuntimeItems:FindFirstChild("Bond")
-                    if bond then
-                        local args = { bond }
-                        game:GetService("ReplicatedStorage").Packages.RemotePromise.Remotes.C_ActivateObject:FireServer(unpack(args))
-                    end
-                    task.wait(0.5)
-                end
-            end)
-        end
-    end
-})
-
-
-local Section = main:AddSection("outros")
-
-
-main:AddButton({
-  Title = "fly (funcional)",
-  Description = "ao clicar ativa uma ui, recomendo usar velocidade 10, para funcionar sente em uma cadeira",
-  Callback = function()
-   loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Vehicle%20Fly%20Gui'))()
-  end
- })
-
-
-
-
-
-
-
-local BondsTab = Window:AddTab({ Title = "aimbot", Icon = "list" })
-
-BondsTab:AddToggle("AimLockToggle", {
-    Title = "AimLock NPC",
-    Description = "Tranca a câmera no NPC mais próximo",
-    Default = false,
-    Callback = function(state)
-        local Players = game:GetService("Players")
-        local player = Players.LocalPlayer
-        local runService = game:GetService("RunService")
-        local camera = workspace.CurrentCamera
-
-        if not _G.AimLockData then
-            _G.AimLockData = { Loop = nil }
-        end
-
-        local function stopAimLock()
-            if _G.AimLockData.Loop then
-                _G.AimLockData.Loop:Disconnect()
-                _G.AimLockData.Loop = nil
-            end
-            if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
-                camera.CameraSubject = player.Character:FindFirstChildOfClass("Humanoid")
-            end
-        end
-
-        local function startAimLock()
-            stopAimLock()
-            
-            _G.AimLockData.Loop = runService.RenderStepped:Connect(function()
-                if not state then return stopAimLock() end
-                if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return end
-                
-                local closestNPC = nil
-                local closestDistance = math.huge
-                
-                for _, npc in ipairs(workspace:GetDescendants()) do
-                    if npc:IsA("Model") and npc ~= player.Character then
-                        local humanoid = npc:FindFirstChildOfClass("Humanoid")
-                        local hrp = npc:FindFirstChild("HumanoidRootPart")
-                        
-                        if humanoid and hrp and humanoid.Health > 0 then
-                            local distance = (hrp.Position - player.Character.HumanoidRootPart.Position).Magnitude
-                            if distance < closestDistance then
-                                closestDistance = distance
-                                closestNPC = npc
-                            end
-                        end
-                    end
-                end
-                
-                if closestNPC then
-                    camera.CameraSubject = closestNPC:FindFirstChildOfClass("Humanoid")
-                else
-                    camera.CameraSubject = player.Character:FindFirstChildOfClass("Humanoid")
-                end
-            end)
-        end
-
-        if state then
-            player.CameraMode = Enum.CameraMode.Classic
-            startAimLock()
-        else
-            stopAimLock()
-        end
-    end
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-local tabpt = Window:AddTab({ Title = "Teleports", Icon = "car" })
-
--- repeat task.wait() until game:IsLoaded()
-
-local Section = tabpt:AddSection("Teleports: feito por Lucas: ")
-
-tabpt:AddButton({
-    Title = "Tp Tesla",
-    Description = " TP para Tesla",
-    Callback = function()
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/ringtaa/tptotesla.github.io/refs/heads/main/Tptotesla.lua'))()
-    end
-})
-
-tabpt:AddButton({
-    Title = "Tp castelo",
-    Description = " TP para castelo",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/castletpfast.github.io/refs/heads/main/FASTCASTLE.lua"))()
-    end
-})
-
-tabpt:AddButton({
-    Title = "Tp fort",
-    Description = " TP para fort",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/Tpfort.github.io/refs/heads/main/Tpfort.lua"))()
-    end
-})
-
-
-local section = tabpt:AddSection("Teleports feito por ringtaa: ")
-
-
-tabpt:AddParagraph({
-  Title = "Como usar:",
-  Content = "tem chances de nao funcionar pois nao fui eu que fiz, para 100% de chance use o meu tp to end entre outros!"
- })
-tabpt:AddButton({
-    Title = "Tp to end",
-    Description = "TP para o final feito por ringtaa (pacifista)",
-    Callback = function()
-   loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/newpacifisct/refs/heads/main/newpacifisct.lua"))()
-  end 
-})
-  
-
-
-
-tabpt:AddButton({
-    Title = "Tp starling",
-    Description = " TP para starling",
-    Callback = function()
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/ringtaa/sterlingnotifcation.github.io/refs/heads/main/Sterling.lua'))()
-    end
-})
-
-tabpt:AddButton({
-    Title = "Tp Bank",
-    Description = " TP para o banco mais próximo",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/Tptobank.github.io/refs/heads/main/Banktp.lua"))()
-    end
-})
-
-
-local section = tabpt:AddSection("seção da Páscoa feito por ringtaa")
-
-tabpt:AddButton({
-    Title = "Tp para os 6 golden eggs",
-    Description = "funciona 100% | Recomendo usar um snake oil para recuperar hp.",
-    Callback = function()
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/r4mpage4/LuaCom/refs/heads/main/collect6eggs.fr'))()
-    end
-})
-
-tabpt:AddButton({
-    Title = "teleports UFO",
-    Description = "Abre outra ui, script para o UFO",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DeadRails"))()
-    end
-})
-
-
-
-
-
-local visual = Window:AddTab({ Title = "Visual", Icon = "list"  })
-
-
-
-visual:AddToggle("unicornesp", {
-    Title = "esp unicórnio",
-    Description = "feito por Lucas, mostra unicórnio num range de 10mil metros",
-    Default = false,
-    Callback = function(state)
-        if state then
-            local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
-            ESP:Toggle(true)
-            ESP.Players = false
-            ESP.Boxes = true
-            ESP.Names = true
-            ESP.TeamColor = false
-            ESP.FaceCamera = true
-            ESP.Distance = 10000
-
-            function AddIfAliveUnicorn(model)
-                if model:IsA("Model") and string.lower(model.Name):find("unicorn") then
-                    local humanoid = model:FindFirstChildWhichIsA("Humanoid")
-                    if humanoid and humanoid.Health > 0 then
-                        local part = model:FindFirstChild("HumanoidRootPart") or model:FindFirstChildWhichIsA("BasePart")
-                        if part then
-                            ESP:Add(model, {
-                                Name = "Unicorn Atı",
-                                PrimaryPart = part,
-                                Color = Color3.fromRGB(255, 182, 193),
-                                IsEnabled = true
-                            })
-                        end
-                    end
-                end
-            end
-
-            for _, obj in pairs(workspace:GetDescendants()) do
-                AddIfAliveUnicorn(obj)
-            end
-
-            workspace.DescendantAdded:Connect(function(obj)
                 task.wait(0.1)
-                AddIfAliveUnicorn(obj)
-            end)
-        end
-    end
-})
-
-
-
-
-
-
-
-  
-local trainTab = Window:AddTab({ Title = "Train", Icon = "train" })
-
-trainTab:AddButton({
-    Title = "tp to train",
-    Description = "Teleporta direto para o trem",
-    Callback = function()
-        task.spawn(function()
-            for i = 1, 4 do
-                local train = workspace:FindFirstChild("Train") or workspace:WaitForChild("Train")
-
-                local function getVehicleSeat()
-                    for _, v in pairs(train:GetDescendants()) do
-                        if v:IsA("VehicleSeat") then
-                            return v
-                        end
-                    end
-                    return nil
-                end
-
-                local seat = getVehicleSeat()
-                if seat then
-                    local char = game.Players.LocalPlayer.Character
-                    if char and char:FindFirstChild("HumanoidRootPart") then
-                        char:MoveTo(seat.Position + Vector3.new(0, 5, 0))
-                    end
-                end
-
-                task.wait(0.5)
             end
         end)
     end
-})
-
-trainTab:AddParagraph({
-      Title = "Em breve",
-      Content = "Em breve terá mais funcionalidades por aqui!"
-   })
-
-
-local andtab = Window:AddTab({
-    Title = "end game",
-    Icon = "list"
-})
-
-
-
-
-andtab:AddButton({
-    Title = "my tp to end",
-    Description = "Teleport para o fim (não pacifista) feito por Lucas",
-    Callback = function()
-        local Players = game:GetService("Players")
-        local player = Players.LocalPlayer
-        local runService = game:GetService("RunService")
-        local camera = workspace.CurrentCamera
-
-        local character = player.Character or player.CharacterAdded:Wait()
-        local hrp = character:WaitForChild("HumanoidRootPart")
-        local targetPos = Vector3.new(-424.4, 28.1, -49040.7)
-
-        task.spawn(function()
-            for i = 1, 450 do
-                hrp.CFrame = CFrame.new(targetPos)
-                task.wait(0.02)
-            end
-        end)
-
-        local aimLockLoop
-
-        local function stopAimLock()
-            if aimLockLoop then
-                aimLockLoop:Disconnect()
-                aimLockLoop = nil
-            end
-            if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
-                camera.CameraSubject = player.Character:FindFirstChildOfClass("Humanoid")
-            end
-        end
-
-        local function startAimLock()
-            stopAimLock()
-
-            aimLockLoop = runService.RenderStepped:Connect(function()
-                if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return end
-
-                local closestNPC = nil
-                local closestDistance = math.huge
-
-                for _, npc in ipairs(workspace:GetDescendants()) do
-                    if npc:IsA("Model") and npc ~= player.Character and not Players:GetPlayerFromCharacter(npc) then
-                        local humanoid = npc:FindFirstChildOfClass("Humanoid")
-                        local hrp = npc:FindFirstChild("HumanoidRootPart")
-
-                        if humanoid and hrp and humanoid.Health > 0 then
-                            local distance = (hrp.Position - player.Character.HumanoidRootPart.Position).Magnitude
-                            if distance < closestDistance then
-                                closestDistance = distance
-                                closestNPC = npc
-                            end
-                        end
-                    end
-                end
-
-                if closestNPC then
-                    camera.CameraSubject = closestNPC:FindFirstChildOfClass("Humanoid")
-                else
-                    camera.CameraSubject = player.Character:FindFirstChildOfClass("Humanoid")
-                end
-            end)
-        end
-
-        player.CameraMode = Enum.CameraMode.Classic
-        startAimLock()
-
-        
-        local noclip = true
-        runService.Stepped:Connect(function()
-            if noclip and character then
-                for _, part in pairs(character:GetDescendants()) do
-                    if part:IsA("BasePart") and part.CanCollide == true then
-                        part.CanCollide = false
-                    end
-                end
-            end
-        end)
-
-        local TweenService = game:GetService("TweenService")
-        local humanoid = character:WaitForChild("Humanoid")
-
-        task.delay(25, function()
-            stopAimLock()
-        end)
-    end
-})
-
-
-
-
-
-
-
-
-
-   
-andtab:AddParagraph({
-      Title = "Em breve",
-      Content = "Em breve terá mais funcionalidades por aqui!"
-   })
-
-
-
-
-
-BondsTab:AddParagraph({
-      Title = "Em breve",
-      Content = "Em breve terá mais funcionalidades por aqui!"
-   })
-
-
-
-
-
-
-
-local creditos = Window:AddTab({ Title = "Créditos", Icon = "list" })
-
-
-
-creditos:AddParagraph({
-    Title = "Créditos de Criação do Script (ringtaa):",
-    Content = "As TPs da seção 'ringtaa', os TPs de Páscoa e a função de voo foram criados por ringtaa."
-})
-
-creditos:AddParagraph({
-  Title = "Créditos de Criação do Script:",
-  Content = "As funções de aimbot, end game, teleport (da minha seção) e visão foram desenvolvidas por Lucas."
-})
-
-creditos:AddParagraph({
-  Title = " ",
-  TextSize = 25,
-  Content = "O sistema principal (exceto a função de voo) e train também foram feitos por Lucas."
-})
+end)
