@@ -133,7 +133,7 @@ task.spawn(function()
         Duration = 4
     })
 end)
-
+local MainLeft = Main:AddSection({ Title = "Farm" })
 local replicated_storage = cloneref(game:GetService("ReplicatedStorage"))
 local workspace = cloneref(game:GetService("Workspace"))
 local enemies = workspace:FindFirstChild("Mobs")
@@ -149,6 +149,30 @@ getgenv().settings = {
     spinSpeed = 5,
     heightOffset = 5
 }
+
+-- Slider untuk kecepatan putaran
+MainLeft:AddSlider("SpinSpeedSlider", {
+    Title = "Spin Speed",
+    Description = "Adjust spin speed while attacking",
+    Min = 1,
+    Max = 20,
+    Default = settings.spinSpeed,
+    Rounding = 1
+}):OnChanged(function(value)
+    settings.spinSpeed = value
+end)
+
+-- Slider untuk ketinggian saat berputar
+MainLeft:AddSlider("HeightOffsetSlider", {
+    Title = "Spin Height",
+    Description = "Adjust flying height while spinning around mobs",
+    Min = 2,
+    Max = 20,
+    Default = settings.heightOffset,
+    Rounding = 1
+}):OnChanged(function(value)
+    settings.heightOffset = value
+end)
 
 -- Fungsi spiral ke target
 local function spiralToTarget(target)
@@ -177,7 +201,7 @@ local function spiralToTarget(target)
 end
 
 -- Toggle Kill Aura
-Main:AddToggle("killAuraToggle", {
+MainLeft:AddToggle("killAuraToggle", {
     Title = "Kill Aura",
     Description = "Automatically fly and spiral to all mobs",
     Default = false
