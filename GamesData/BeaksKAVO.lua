@@ -1,127 +1,190 @@
--- Open Source Venture
+
+-- Ads
+local ScreenGui = Instance.new("ScreenGui")
+local AdFrame = Instance.new("Frame")
+local DiscordLabel = Instance.new("TextLabel")
+local CopyButton = Instance.new("TextButton")
+local ExitButton = Instance.new("TextButton")
+local WaitButton = Instance.new("TextButton")
+local UIGradientFrame = Instance.new("UIGradient")
+local UIGradientText = Instance.new("UIGradient")
+ScreenGui.Name = "AdsGui"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+
+AdFrame.Name = "AdFrame"
+AdFrame.Parent = ScreenGui
+AdFrame.Size = UDim2.new(0.4, 0, 0.3, 0)
+AdFrame.Position = UDim2.new(0.5, 0, 0.35, 0)
+AdFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+AdFrame.BorderSizePixel = 2
+AdFrame.Draggable = true
+AdFrame.Active = true
+AdFrame.BorderColor3 = Color3.fromRGB(0, 0, 139) -- Biru Gelap
+
+-- Gradient untuk Background AdFrame
+UIGradientFrame.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), -- Putih di atas
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 139)) -- Biru Gelap di bawah
+}
+UIGradientFrame.Parent = AdFrame
+
+DiscordLabel.Name = "DiscordLabel"
+DiscordLabel.Parent = AdFrame
+DiscordLabel.Size = UDim2.new(1, 0, 0.6, 0)
+DiscordLabel.BackgroundTransparency = 1
+DiscordLabel.Text = "Stellar"
+DiscordLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+DiscordLabel.TextSize = 22
+DiscordLabel.TextWrapped = true
+
+UIGradientText.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), -- Putih di atas
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(70, 130, 180)), -- Gradasi Biru Muda
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 139)) -- Biru Gelap di bawah
+}
+UIGradientText.Parent = DiscordLabel
+
+CopyButton.Name = "CopyButton"
+CopyButton.Parent = AdFrame
+CopyButton.Size = UDim2.new(0.4, 0, 0.2, 0)
+CopyButton.Position = UDim2.new(0.1, 0, 0.7, 0)
+CopyButton.Text = "Copy Link Discord"
+CopyButton.BackgroundColor3 = Color3.fromRGB(0, 0, 139) -- Biru Gelap
+CopyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+ExitButton.Name = "ExitButton"
+ExitButton.Parent = AdFrame
+ExitButton.Size = UDim2.new(0.4, 0, 0.2, 0)
+ExitButton.Position = UDim2.new(0.5, 0, 0.7, 0)
+ExitButton.Text = "Exit"
+ExitButton.Visible = false
+ExitButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+ExitButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- Putih
+
+WaitButton.Name = "WaittoExit"
+WaitButton.Parent = AdFrame
+WaitButton.Size = UDim2.new(0.4, 0, 0.2, 0)
+WaitButton.Position = UDim2.new(0.5, 0, 0.7, 0)
+WaitButton.Text = "Waitting Delay Exit"
+WaitButton.Visible = true
+WaitButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+WaitButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- Putih
+
+task.delay(5, function()
+    WaitButton.Visible = false
+    ExitButton.Visible = true
+end)
+
+CopyButton.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard("https://discord.com/invite/eTVvgvRq4s")
+        task.wait()
+        CopyButton.Text = "Copied To Discord Link"
+        task.wait(0.6)
+        CopyButton.Text = "Copy Link Discord"
+    end
+end)
+
+ExitButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
 -- Services
 local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local GuiService = game:GetService("GuiService")
 local UserInputService = game:GetService("UserInputService")
-local Camera = workspace.CurrentCamera
 
--- Variables
+-- Player Setup
 local LocalPlayer = Players.LocalPlayer
-local AimbotEnabled = false
-local AimSmoothness = 0.1
-local LineColor = Color3.fromRGB(0, 255, 0)
-local BoxColor = Color3.fromRGB(255, 0, 0)
-local AimbotRange = 200
-local AimbotSection = AimbotTab:NewSection("Aimbot Settings")
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local Backpack = LocalPlayer:WaitForChild("Backpack")
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 
-AimbotSection:NewToggle("Enable Aimbot", "Toggle aimbot on/off", function(state)
-    AimbotEnabled = state
-end)
+local StellarLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/x2zu/loader/refs/heads/main/VentureData/StellarUI.lua"))()
 
-AimbotSection:NewSlider("Aim Smoothness", "Adjust aim smoothness", 100, 1, function(value)
-    AimSmoothness = value / 100
-end)
+local Window = StellarLibrary:CreateWindow({Title = "Stellar"})
 
-AimbotSection:NewSlider("Aimbot Range", "Adjust aimbot range", 500, 50, function(value)
-    AimbotRange = value
-end)
+print([[  
+  ∧,,,∧
+(  ̳• · • ̳)
+/    づ You want my heart? Don't skid please :D
+  ∧,,,∧
+(  ̳• · • ̳)
+/    づ♡ Ok here's my heart
 
-AimbotSection:NewColorPicker("Box Color", "Choose box color", BoxColor, function(color)
-    BoxColor = color
-end)
+🟢 Successfully Loaded!
+]])
+local Main = Window:AddTab({ Title = "General", Icon = "rbxassetid://10734966248" })
+local Misc = Window:AddTab({Title = "Misc", Icon = "rbxassetid://10734976739"})
+local Settings = Window:AddTab({Title = "Settings", Icon = "rbxassetid://10734950020"})
+local Options = StellarLibrary.Options
+local MainLeft = Main:AddSection({ Title = "Farm" })
 
-AimbotSection:NewColorPicker("Line Color", "Choose line color", LineColor, function(color)
-    LineColor = color
-end)
-
-local Boxes = {}
-local Lines = {}
-
-local function GetAllPlayers()
-    local allPlayers = {}
-    
-    for _, player in pairs(Players:GetPlayers()) do
-        if player ~= LocalPlayer then
-            local character = player.Character
-            if character and character:FindFirstChild("HumanoidRootPart") then
-                table.insert(allPlayers, character)
-            end
-        end
-    end
-    
-    return allPlayers
+local replicated_storage = cloneref(game:GetService("ReplicatedStorage"))
+local workspace = cloneref(game:GetService("Workspace"))
+local enemies = workspace:FindFirstChild("Mobs")
+local Players = cloneref(game:GetService("Players"))
+local LocalPlayer = Players.LocalPlayer
+local HRP = function()
+    return LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 end
 
-local function GetNearestTarget()
-    local closestTarget = nil
-    local shortestDistance = AimbotRange
-    local mouseLocation = UserInputService:GetMouseLocation()
-    
-    for _, character in pairs(GetAllPlayers()) do
-        local targetPart = character:FindFirstChild("HumanoidRootPart")
-        if targetPart then
-            local screenPosition, onScreen = Camera:WorldToViewportPoint(targetPart.Position)
-            if onScreen then
-                local distance = (Vector2.new(screenPosition.X, screenPosition.Y) - mouseLocation).Magnitude
-                if distance < shortestDistance then
-                    shortestDistance = distance
-                    closestTarget = targetPart
-                end
-            end
+getgenv().settings = {
+    enabled = false,
+    spinSpeed = 5,
+    heightOffset = 5
+}
+
+-- Fungsi spiral ke target
+local function spiralToTarget(target)
+    local radius = 10
+    local angle = 0
+
+    while target and target.Parent and settings.enabled do
+        if not HRP() then break end
+
+        angle = angle + settings.spinSpeed * task.wait()
+
+        local offsetX = math.cos(angle) * radius
+        local offsetZ = math.sin(angle) * radius
+        local height = settings.heightOffset
+
+        HRP().CFrame = CFrame.new(HRP().Position, target.Position) * CFrame.new(offsetX, height, offsetZ)
+        HRP().Velocity = Vector3.new(0, 0, 0)
+
+        replicated_storage:WaitForChild("Systems"):WaitForChild("Combat"):WaitForChild("PlayerAttack"):FireServer({target})
+
+        if target:FindFirstChild("Humanoid") and target.Humanoid.Health <= 0 then
+            break
         end
     end
-    return closestTarget
 end
 
-RunService.RenderStepped:Connect(function()
-    for _, box in pairs(Boxes) do
-        box.Visible = false
-    end
-    for _, line in pairs(Lines) do
-        line.Visible = false
-    end
-    
-    if AimbotEnabled then
-        local players = GetAllPlayers()
-        local nearestTarget = GetNearestTarget()
-        
-        for i, targetCharacter in pairs(players) do
-            local target = targetCharacter:FindFirstChild("HumanoidRootPart")
-            if target then
-                if not Boxes[i] then
-                    Boxes[i] = Drawing.new("Square")
-                    Boxes[i].Thickness = 2
-                    Boxes[i].Filled = false
-                    Boxes[i].Visible = false
+-- Toggle Kill Aura
+MainLeft:AddToggle("killAuraToggle", {
+    Title = "Kill Aura",
+    Description = "Automatically fly and spiral to all mobs",
+    Default = false
+}):OnChanged(function(value)
+    settings.enabled = value
+    if value then
+        task.spawn(function()
+            while settings.enabled do
+                for _, mob in ipairs(enemies:GetChildren()) do
+                    if not settings.enabled then break end
+                    if mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
+                        spiralToTarget(mob.HumanoidRootPart or mob.PrimaryPart)
+                        task.wait(0.1)
+                    end
                 end
-                Boxes[i].Color = BoxColor
-                
-                if not Lines[i] then
-                    Lines[i] = Drawing.new("Line")
-                    Lines[i].Thickness = 2
-                    Lines[i].Visible = false
-                end
-                Lines[i].Color = LineColor
-                
-                local targetScreenPosition, targetOnScreen = Camera:WorldToViewportPoint(target.Position)
-                local localScreenPosition = Camera:WorldToViewportPoint(LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character.HumanoidRootPart.Position or Vector3.new(0,0,0))
-                
-                if targetOnScreen then
-                    Boxes[i].Position = Vector2.new(targetScreenPosition.X - 25, targetScreenPosition.Y - 50)
-                    Boxes[i].Size = Vector2.new(50, 100)
-                    Boxes[i].Visible = true
-                    
-                    Lines[i].From = Vector2.new(localScreenPosition.X, localScreenPosition.Y)
-                    Lines[i].To = Vector2.new(targetScreenPosition.X, targetScreenPosition.Y)
-                    Lines[i].Visible = true
-                end
+                task.wait(0.1)
             end
-        end
-        
-        if nearestTarget then
-            local targetScreenPos = Camera:WorldToViewportPoint(nearestTarget.Position)
-            local currentCameraCFrame = Camera.CFrame.Position
-            Camera.CFrame = Camera.CFrame:Lerp(CFrame.new(currentCameraCFrame, nearestTarget.Position), AimSmoothness)
-        end
+        end)
     end
 end)
