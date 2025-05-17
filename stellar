@@ -1,1 +1,661 @@
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/x2zu/loader/refs/heads/main/GamesData/Fisch.lua"))()
+
+loadstring(game:HttpGet(("https://raw.githubusercontent.com/Shade-vex/shadevex/refs/heads/main/menu-for-you-hub.txt")))()
+
+       local Window = MakeWindow({
+         Hub = {
+         Title = "Hutao Hub",
+         Animation = "Hutao Hub"
+         },
+        Key = {
+        KeySystem = false,
+        Title = "Loading Cat V2",
+        Description = "Script by Kzu123",
+        KeyLink = "https://discord.gg/DmN8sE7Y",
+        Keys = {"Loading-Cat-V2"},
+        Notifi = {
+        Notifications = true,
+        CorrectKey = "Đang chạy script...",
+       Incorrectkey = "Key không tồn tại",
+       CopyKeyLink = "Đã sao chép link",
+      }
+    }
+  })
+
+       MinimizeButton({
+       Image = "http://www.roblox.com/asset/?id=96813908648032",   
+       Size = {50, 50},
+       Color = Color3.fromRGB(10, 10, 10),
+       Corner = true,
+       Stroke = false,
+       StrokeColor = Color3.fromRGB(255, 0, 0)
+      })
+      
+------ Tab
+
+     local Tab1o = MakeTab({Name = "Main"})
+     local Tab2o = MakeTab({Name = "Teleport"})
+
+------ button
+
+
+   Section = AddSection(Tab1o, {"All Island"})
+
+
+-- Biến kiểm soát
+local autoClickEnabled = false
+local attackRange = 50 -- Tăng tầm đánh lên 50m
+
+-- Hàm Auto Click
+local function startAutoClick()
+    autoClickEnabled = not autoClickEnabled
+
+    if autoClickEnabled then
+        print("🔹 Auto Click: BẬT")
+
+        spawn(function()
+            while autoClickEnabled do
+                pcall(function()
+                    local vim = game:GetService("VirtualInputManager")
+                    vim:SendMouseButtonEvent(0, 0, 0, true, game, 0) -- Nhấp chuột
+                    wait(0.1)
+                    vim:SendMouseButtonEvent(0, 0, 0, false, game, 0)
+                end)
+                wait(0.1)
+            end
+        end)
+    else
+        print("🔹 Auto Click: TẮT")
+    end
+end
+
+-- Hàm Tăng Tầm Đánh
+local function extendHitbox()
+    local combatFramework = require(game.Players.LocalPlayer.PlayerScripts.CombatFramework)
+    local combatData = getupvalues(combatFramework)[2]
+
+    if combatData and combatData.activeController then
+        local controller = combatData.activeController
+        if controller then
+            local rigLib = require(game.ReplicatedStorage.CombatFramework.RigLib)
+            rigLib.getBladeHits = function(_, targets, range)
+                return rigLib.getBladeHits(_, targets, attackRange) -- Tăng tầm đánh lên 50m
+            end
+        end
+    end
+end
+
+-- Kết hợp Auto Click + Tăng Tầm Đánh
+local function toggleAutoAttack()
+    startAutoClick() -- Bật Auto Click
+    extendHitbox() -- Tăng tầm đánh
+end
+
+-- Thêm nút bật/tắt vào menu
+AddButton(Tab1o, {
+    Name = "Auto Miner Click",
+    Callback = function()
+        toggleAutoAttack()
+    end
+})
+
+
+
+
+
+
+
+
+--// Biến cần dùng
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local noclipEnabled = false
+local noclipConnection
+local isCoordVisible = false
+
+--// Nút Bật Noclip
+AddButton(Tab1o, {
+    Name = "Noclip OP",
+    Callback = function()
+        noclipEnabled = not noclipEnabled
+        if noclipEnabled then
+            if noclipConnection then noclipConnection:Disconnect() end
+            noclipConnection = RunService.Stepped:Connect(function()
+                if LocalPlayer.Character then
+                    for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+                        if part:IsA("BasePart") then
+                            part.CanCollide = false
+                        end
+                    end
+                end
+            end)
+            Notify("Noclip", "Đã bật noclip.")
+        else
+            if noclipConnection then
+                noclipConnection:Disconnect()
+                noclipConnection = nil
+            end
+            Notify("Noclip", "Đã tắt noclip.")
+        end
+    end
+})
+
+
+
+
+   Section = AddSection(Tab1o, {"Island 1"})
+
+
+
+local espEnabled = false
+local espPart = nil
+
+AddButton(Tab1o, {
+    Name = "Esp Island 1",
+    Callback = function()
+        espEnabled = not espEnabled
+
+        if espEnabled then
+            -- Tạo part tại tọa độ
+            local islandPosition = Vector3.new(332.7, 30, -168.1) -- Thay tọa độ theo ý bạn
+            espPart = Instance.new("Part")
+            espPart.Anchored = true
+            espPart.CanCollide = false
+            espPart.Transparency = 1
+            espPart.Size = Vector3.new(1, 1, 1)
+            espPart.Position = islandPosition
+            espPart.Name = "Island1ESP"
+            espPart.Parent = workspace
+
+            -- BillboardGui
+            local billboardGui = Instance.new("BillboardGui")
+            billboardGui.Size = UDim2.new(0, 100, 0, 40)
+            billboardGui.Adornee = espPart
+            billboardGui.AlwaysOnTop = true
+            billboardGui.StudsOffset = Vector3.new(0, 2, 0)
+            billboardGui.Parent = espPart
+
+            local textLabel = Instance.new("TextLabel")
+            textLabel.Size = UDim2.new(1, 0, 1, 0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.Text = "Island 1"
+            textLabel.TextColor3 = Color3.new(1, 1, 0)
+            textLabel.TextStrokeTransparency = 0
+            textLabel.TextScaled = true
+            textLabel.Font = Enum.Font.SourceSansBold
+            textLabel.Parent = billboardGui
+        else
+            -- Xóa ESP nếu có
+            if espPart and espPart.Parent then
+                espPart:Destroy()
+                espPart = nil
+            end
+        end
+    end
+})
+
+
+
+
+
+
+
+   Section = AddSection(Tab1o, {"Island 2"})
+
+
+local espEnabled = false
+local espPart = nil
+
+AddButton(Tab1o, {
+    Name = "Esp Island 2",
+    Callback = function()
+        espEnabled = not espEnabled
+
+        if espEnabled then
+            -- Tạo part tại tọa độ
+            local islandPosition = Vector3.new(312.0, 30, 204.6) -- Thay tọa độ theo ý bạn
+            espPart = Instance.new("Part")
+            espPart.Anchored = true
+            espPart.CanCollide = false
+            espPart.Transparency = 1
+            espPart.Size = Vector3.new(1, 1, 1)
+            espPart.Position = islandPosition
+            espPart.Name = "Island2ESP"
+            espPart.Parent = workspace
+
+            -- BillboardGui
+            local billboardGui = Instance.new("BillboardGui")
+            billboardGui.Size = UDim2.new(0, 100, 0, 40)
+            billboardGui.Adornee = espPart
+            billboardGui.AlwaysOnTop = true
+            billboardGui.StudsOffset = Vector3.new(0, 2, 0)
+            billboardGui.Parent = espPart
+
+            local textLabel = Instance.new("TextLabel")
+            textLabel.Size = UDim2.new(1, 0, 1, 0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.Text = "Island 2"
+            textLabel.TextColor3 = Color3.new(1, 1, 0)
+            textLabel.TextStrokeTransparency = 0
+            textLabel.TextScaled = true
+            textLabel.Font = Enum.Font.SourceSansBold
+            textLabel.Parent = billboardGui
+        else
+            -- Xóa ESP nếu có
+            if espPart and espPart.Parent then
+                espPart:Destroy()
+                espPart = nil
+            end
+        end
+    end
+})
+
+
+
+
+   Section = AddSection(Tab1o, {"Island 3"})
+
+
+
+
+local espEnabled = false
+local espPart = nil
+
+AddButton(Tab1o, {
+    Name = "Esp Island 3",
+    Callback = function()
+        espEnabled = not espEnabled
+
+        if espEnabled then
+            -- Tạo part tại tọa độ
+            local islandPosition = Vector3.new(-21.5, 30, 372.2) -- Thay tọa độ theo ý bạn
+            espPart = Instance.new("Part")
+            espPart.Anchored = true
+            espPart.CanCollide = false
+            espPart.Transparency = 1
+            espPart.Size = Vector3.new(1, 1, 1)
+            espPart.Position = islandPosition
+            espPart.Name = "Island3ESP"
+            espPart.Parent = workspace
+
+            -- BillboardGui
+            local billboardGui = Instance.new("BillboardGui")
+            billboardGui.Size = UDim2.new(0, 100, 0, 40)
+            billboardGui.Adornee = espPart
+            billboardGui.AlwaysOnTop = true
+            billboardGui.StudsOffset = Vector3.new(0, 2, 0)
+            billboardGui.Parent = espPart
+
+            local textLabel = Instance.new("TextLabel")
+            textLabel.Size = UDim2.new(1, 0, 1, 0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.Text = "Island 3"
+            textLabel.TextColor3 = Color3.new(1, 1, 0)
+            textLabel.TextStrokeTransparency = 0
+            textLabel.TextScaled = true
+            textLabel.Font = Enum.Font.SourceSansBold
+            textLabel.Parent = billboardGui
+        else
+            -- Xóa ESP nếu có
+            if espPart and espPart.Parent then
+                espPart:Destroy()
+                espPart = nil
+            end
+        end
+    end
+})
+
+
+
+
+local teleporting = false
+local teleportThread = nil
+
+-- Danh sách tọa độ
+local coordinates = {
+    Vector3.new(-62.0, 15.1, 391.3),
+    Vector3.new(-51.0, 15.1, 395.3),
+    Vector3.new(-55.7, 15.1, 391.3),
+    Vector3.new(-36.3, 15.1, 418.4),
+    Vector3.new(-42.0, 15.1, 418.5),
+    Vector3.new(-43.6, 15.1, 413.8),
+    Vector3.new(-32.7, 15.1, 401.7),
+    Vector3.new(-26.1, 15.1, 400.5),
+    Vector3.new(-28.4, 15.1, 406.5),
+    Vector3.new(-27.3, 3.1, 394.1),
+    Vector3.new(-35.4, 3.1, 394.3),
+    Vector3.new(-42.5, 3.1, 389.7)
+}
+
+-- Hàm bắt đầu
+local function startTeleport()
+    if teleporting then return end
+    teleporting = true
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local hrp = character:WaitForChild("HumanoidRootPart")
+
+    teleportThread = task.spawn(function()
+        local index = 1
+        while teleporting do
+            local targetPos = coordinates[index]
+            local startTime = tick()
+            while tick() - startTime < 3 and teleporting do
+                hrp.CFrame = CFrame.new(targetPos)
+                task.wait(0.1)
+            end
+            index = index + 1
+            if index > #coordinates then
+                index = 1
+            end
+        end
+    end)
+end
+
+-- Hàm dừng
+local function stopTeleport()
+    teleporting = false
+    if teleportThread then
+        task.cancel(teleportThread)
+        teleportThread = nil
+    end
+end
+
+-- Toggle tổng
+local function toggleTeleport()
+    if teleporting then
+        stopTeleport()
+        print("Auto Farm Iron: TẮT")
+    else
+        startTeleport()
+        print("Auto Farm Iron: BẬT")
+    end
+end
+
+-- Thêm nút vào menu (thay thế Toggle)
+AddButton(Tab1o, {
+    Name = "Auto Farm Stone",
+    Callback = function()
+        toggleTeleport()
+    end
+})
+
+
+
+
+
+
+
+
+
+local teleporting = false
+local teleportThread = nil
+
+-- Danh sách tọa độ
+local coordinates = {
+    Vector3.new(-46.2, 27.0, 527.8),
+    Vector3.new(-45, 27.0, 534.1),
+    Vector3.new(-41.9, 27.0, 504.2),
+    Vector3.new(-35.7, 27.0, 502.7),
+    Vector3.new(-37.1, 27.0, 508.8),
+    Vector3.new(-27.2, 27.0, 520.6),
+    Vector3.new(-28.2, 27.0, 526.1),
+    Vector3.new(-17.3, 27.0, 533.0),
+    Vector3.new(-13.4, 27.0, 523.3),
+    Vector3.new(-12.4, 27.0, 518.2),
+    Vector3.new(-7.6, 27.0, 521.1),
+    Vector3.new(5.7, 27.0, 498.1),
+    Vector3.new(16.1, 27.0, 500.5),
+    Vector3.new(13.4, 27.0, 510.0),
+    Vector3.new(-5.8, 27.0, 489.1),
+    Vector3.new(-24.8, 27.0, 477.3),
+    Vector3.new(-42.5, 27.0, 474.7)
+}
+
+-- Hàm bắt đầu
+local function startTeleport()
+    if teleporting then return end
+    teleporting = true
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local hrp = character:WaitForChild("HumanoidRootPart")
+
+    teleportThread = task.spawn(function()
+        local index = 1
+        while teleporting do
+            local targetPos = coordinates[index]
+            local startTime = tick()
+            while tick() - startTime < 3 and teleporting do
+                hrp.CFrame = CFrame.new(targetPos)
+                task.wait(0.1)
+            end
+            index = index + 1
+            if index > #coordinates then
+                index = 1
+            end
+        end
+    end)
+end
+
+-- Hàm dừng
+local function stopTeleport()
+    teleporting = false
+    if teleportThread then
+        task.cancel(teleportThread)
+        teleportThread = nil
+    end
+end
+
+-- Toggle tổng
+local function toggleTeleport()
+    if teleporting then
+        stopTeleport()
+        print("Auto Farm Iron: TẮT")
+    else
+        startTeleport()
+        print("Auto Farm Iron: BẬT")
+    end
+end
+
+-- Thêm nút vào menu (thay thế Toggle)
+AddButton(Tab1o, {
+    Name = "Auto Farm Iron",
+    Callback = function()
+        toggleTeleport()
+    end
+})
+
+
+
+
+
+   Section = AddSection(Tab1o, {"Island 4"})
+
+
+
+
+
+
+local espEnabled = false
+local espPart = nil
+
+AddButton(Tab1o, {
+    Name = "Esp Island 4",
+    Callback = function()
+        espEnabled = not espEnabled
+
+        if espEnabled then
+            -- Tạo part tại tọa độ
+            local islandPosition = Vector3.new(-333.3, 30, 167.6) -- Thay tọa độ theo ý bạn
+            espPart = Instance.new("Part")
+            espPart.Anchored = true
+            espPart.CanCollide = false
+            espPart.Transparency = 1
+            espPart.Size = Vector3.new(1, 1, 1)
+            espPart.Position = islandPosition
+            espPart.Name = "Island4ESP"
+            espPart.Parent = workspace
+
+            -- BillboardGui
+            local billboardGui = Instance.new("BillboardGui")
+            billboardGui.Size = UDim2.new(0, 100, 0, 40)
+            billboardGui.Adornee = espPart
+            billboardGui.AlwaysOnTop = true
+            billboardGui.StudsOffset = Vector3.new(0, 2, 0)
+            billboardGui.Parent = espPart
+
+            local textLabel = Instance.new("TextLabel")
+            textLabel.Size = UDim2.new(1, 0, 1, 0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.Text = "Island 4"
+            textLabel.TextColor3 = Color3.new(1, 1, 0)
+            textLabel.TextStrokeTransparency = 0
+            textLabel.TextScaled = true
+            textLabel.Font = Enum.Font.SourceSansBold
+            textLabel.Parent = billboardGui
+        else
+            -- Xóa ESP nếu có
+            if espPart and espPart.Parent then
+                espPart:Destroy()
+                espPart = nil
+            end
+        end
+    end
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+   Section = AddSection(Tab1o, {"Island 5"})
+
+
+local espEnabled = false
+local espPart = nil
+
+AddButton(Tab1o, {
+    Name = "Esp Island 5",
+    Callback = function()
+        espEnabled = not espEnabled
+
+        if espEnabled then
+            -- Tạo part tại tọa độ
+            local islandPosition = Vector3.new(-311.8, 30, -204.4) -- Thay tọa độ theo ý bạn
+            espPart = Instance.new("Part")
+            espPart.Anchored = true
+            espPart.CanCollide = false
+            espPart.Transparency = 1
+            espPart.Size = Vector3.new(1, 1, 1)
+            espPart.Position = islandPosition
+            espPart.Name = "Island5ESP"
+            espPart.Parent = workspace
+
+            -- BillboardGui
+            local billboardGui = Instance.new("BillboardGui")
+            billboardGui.Size = UDim2.new(0, 100, 0, 40)
+            billboardGui.Adornee = espPart
+            billboardGui.AlwaysOnTop = true
+            billboardGui.StudsOffset = Vector3.new(0, 2, 0)
+            billboardGui.Parent = espPart
+
+            local textLabel = Instance.new("TextLabel")
+            textLabel.Size = UDim2.new(1, 0, 1, 0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.Text = "Island 5"
+            textLabel.TextColor3 = Color3.new(1, 1, 0)
+            textLabel.TextStrokeTransparency = 0
+            textLabel.TextScaled = true
+            textLabel.Font = Enum.Font.SourceSansBold
+            textLabel.Parent = billboardGui
+        else
+            -- Xóa ESP nếu có
+            if espPart and espPart.Parent then
+                espPart:Destroy()
+                espPart = nil
+            end
+        end
+    end
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+   Section = AddSection(Tab2o, {"Player"})
+
+
+
+
+
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Biến cục bộ để tránh xung đột
+local selectedPlayer = nil
+local playerList = {}
+local playerDropdown -- Biến lưu dropdown
+
+-- Hàm cập nhật danh sách người chơi
+local function updatePlayerList()
+    playerList = {} -- Xóa danh sách cũ
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            table.insert(playerList, player.Name)
+        end
+    end
+    if playerDropdown then
+        playerDropdown:SetOptions(playerList) -- Cập nhật dropdown với danh sách mới
+    end
+end
+
+updatePlayerList()
+Players.PlayerAdded:Connect(updatePlayerList)
+Players.PlayerRemoving:Connect(updatePlayerList)
+
+-- Nút cập nhật danh sách người chơi trong Tab7o
+AddButton(Tab2o, {
+    Name = "Update Player",
+    Callback = function()
+        updatePlayerList()
+    end
+})
+
+-- Dropdown danh sách người chơi trong Tab2o
+playerDropdown = AddDropdown(Tab2o, {
+    Name = "All Player",
+    Options = playerList,
+    Callback = function(selected)
+        selectedPlayer = Players:FindFirstChild(selected)
+    end
+})
+
+-- Nút dịch chuyển đến người chơi đã chọn trong Tab2o
+AddButton(Tab2o, {
+    Name = "Teleport",
+    Callback = function()
+        if selectedPlayer and selectedPlayer.Character and selectedPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            LocalPlayer.Character.HumanoidRootPart.CFrame = selectedPlayer.Character.HumanoidRootPart.CFrame
+        else
+            warn("Không thể dịch chuyển! Người chơi không hợp lệ hoặc đã rời game.")
+        end
+    end
+})
