@@ -23,9 +23,9 @@ local games = {
     -- -- [9275288] = 'https://api.luarmor.net/files/v3/loaders/df9794a5edfcf119da293041f9368ce5.lua', -- Hide The Body ( Discontinued )
     -- [35888785] = 'https://api.luarmor.net/files/v3/loaders/5855fb7c80db4b87e10fc66309916005.lua', -- Prospecting 
     -- [3385385] = 'https://api.luarmor.net/files/v3/loaders/d03f35f5c3c18cc4d689583e0a8f6b7b.lua', -- Hypershot
-    [35102746] = 'https://gist.githubusercontent.com/x2zu/2b059ff3a6f7a58074464a87753a7dc9/raw/9ebcd5efc4c70ce9c31fcd08bb549281cbbb26d4/Xexxsss', -- Fish It
+    [35102746] = 'https://raw.githubusercontent.com/xwwwwwwwwwwwwwwwwwwwqd/loader/main/GamesData/Fisxeeddddd.lua', -- Fish It
     -- [6042520] = 'https://api.luarmor.net/files/v3/loaders/f2a3f1471a865ec3bee16c2e639f0466.lua', -- 99 Nights
-    [36015593] = 'https://gist.githubusercontent.com/x2zu/ae784437cb59b8042a43d6c9e3750bd7/raw/5fa60eabb449cb9ef9fabcb22783601b81bea6e4/Hxyseess', -- Hunty Zombie
+    [36015593] = 'https://raw.githubusercontent.com/xwwwwwwwwwwwwwwwwwwwqd/loader/main/GamesData/Hunxxxxxes.lua', -- Hunty Zombie
  
 } 
 
