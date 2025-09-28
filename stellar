@@ -17,7 +17,7 @@ local creator = game.CreatorId
 
 local games = {
     [35102746] = 'https://raw.githubusercontent.com/xwwwwwwwwwwwwwwwwwwwqd/loader/main/GamesData/Fisxeeddddd.lua', -- Fish It
-    [36015593] = 'https://raw.githubusercontent.com/xwwwwwwwwwwwwwwwwwwwqd/loader/main/GamesData/Hunxxxxxes.lua', Plants Vs Brainrots
+    [34869880] = 'https://raw.githubusercontent.com/xwwwwwwwwwwwwwwwwwwwqd/loader/main/GamesData/Pevebes', Plants Vs Brainrots
  
 } 
 
