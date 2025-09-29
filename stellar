@@ -1,3 +1,4 @@
+
 --[[
 __   __ _____  _______   _ 
 \ \ / // __  \|___  / | | |
@@ -13,22 +14,18 @@ if not game:IsLoaded() then
 end
 
 print("Supported game!")
-local creator = game.CreatorId
+
+local gameId = game.PlaceId
 
 local games = {
-    [35102746] = 'https://raw.githubusercontent.com/xwwwwwwwwwwwwwwwwwwwqd/loader/main/GamesData/Fisxeeddddd.lua', -- Fish It
-    [34869880] = 'https://raw.githubusercontent.com/xwwwwwwwwwwwwwwwwwwwqd/loader/main/GamesData/Pevebes', Plants Vs Brainrots
- 
-} 
+    [121864768012064] = 'https://api.luarmor.net/files/v3/loaders/d577db7077756aa9249772848de92121.lua', -- Fish It
+    [127742093697776] = 'https://api.luarmor.net/files/v3/loaders/82b75b1b4e2028dfbc858df2d5cebae6.lua', -- Plants Vs Brainrots
+}
 
-if games[creator] then 
+if games[gameId] then 
     print("Please wait, daddyhh~ loading..")
-    loadstring(game:HttpGet(games[creator]))()
+    loadstring(game:HttpGet(games[gameId]))()
 else
     warn("Unsupported game.")
 end
-
-
-
-
 
