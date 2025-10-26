@@ -1,7 +1,3 @@
--- ===========================
--- NOCTIS LOGGER SYSTEM
--- ===========================
-
 local Logger = {}
 Logger.__index = Logger
 
@@ -122,5 +118,6 @@ end
 
 -- Global logger instance
 _G.Logger = Logger.new("Nemesis")
+
 
 return Logger
