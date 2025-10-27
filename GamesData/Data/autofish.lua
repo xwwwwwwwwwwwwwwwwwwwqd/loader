@@ -1,5 +1,5 @@
 -- ===========================
--- AUTO FISH FEATURE - SIMPLE TEXT EFFECT TRIGGER
+-- AUTO FISH FEATURE - SPAM METHOD (FIXED)
 -- File: autofishv4_fixed.lua
 -- ===========================
 
@@ -36,11 +36,6 @@ local function initializeRemotes()
         FishingCompleted = NetPath:WaitForChild("RE/FishingCompleted", 5)
         FishObtainedNotification = NetPath:WaitForChild("RE/ObtainedNewFishNotification", 5)
         
-        local ReplicateTextEffect = NetPath:FindFirstChild("RE/ReplicateTextEffect")
-        if ReplicateTextEffect then
-            _G.ReplicateTextEffect = ReplicateTextEffect
-        end
-        
         return true
     end)
     
@@ -51,18 +46,18 @@ end
 local isRunning = false
 local currentMode = "Fast"
 local connection = nil
+local spamConnection = nil
 local fishObtainedConnection = nil
-local textEffectConnection = nil
 local controls = {}
 local fishingInProgress = false
 local lastFishTime = 0
 local remotesInitialized = false
-local currentCastCoroutine = nil
 
--- Tracking
-local textEffectReceived = false
+-- Spam and completion tracking
+local spamActive = false
+local completionCheckActive = false
+local lastBackpackCount = 0
 local fishCaughtFlag = false
-local waitingForCompletion = false
 
 -- Rod-specific configs
 local FISHING_CONFIGS = {
@@ -70,13 +65,18 @@ local FISHING_CONFIGS = {
         chargeTime = 1.0,
         waitBetween = 0,
         rodSlot = 1,
-        completionDelay = 2  -- Delay setelah text effect (seconds)
+        spamDelay = 0.05,      -- Spam every 50ms
+        maxSpamTime = 20,       -- Stop spam after 20s
+        skipMinigame = true    -- Skip tap-tap animation
     },
     ["Slow"] = {
         chargeTime = 1.0,
         waitBetween = 1,
         rodSlot = 1,
-        completionDelay = 2.0  -- Delay setelah text effect (seconds)
+        spamDelay = 0.1,
+        maxSpamTime = 20,
+        skipMinigame = false,  -- Play tap-tap animation
+        minigameDuration = 5 -- Duration before firing completion
     }
 }
 
@@ -90,7 +90,10 @@ function AutoFishFeature:Init(guiControls)
         return false
     end
     
-    logger:info("Initialized - Simple text effect trigger")
+    -- Initialize backpack count for completion detection
+    self:UpdateBackpackCount()
+    
+    logger:info("Initialized with SPAM method - Fast & Slow modes")
     return true
 end
 
@@ -106,19 +109,19 @@ function AutoFishFeature:Start(config)
     isRunning = true
     currentMode = config.mode or "Fast"
     fishingInProgress = false
+    spamActive = false
     lastFishTime = 0
     fishCaughtFlag = false
-    textEffectReceived = false
-    waitingForCompletion = false
     
-    logger:info("Started - Mode:", currentMode)
+    logger:info("Started SPAM method - Mode:", currentMode)
     
+    -- Setup fish obtained listener
     self:SetupFishObtainedListener()
-    self:SetupTextEffectListener()
     
+    -- Main fishing loop
     connection = RunService.Heartbeat:Connect(function()
         if not isRunning then return end
-        self:FishingLoop()
+        self:SpamFishingLoop()
     end)
 end
 
@@ -128,20 +131,18 @@ function AutoFishFeature:Stop()
     
     isRunning = false
     fishingInProgress = false
+    spamActive = false
+    completionCheckActive = false
     fishCaughtFlag = false
-    textEffectReceived = false
-    waitingForCompletion = false
-    
-    if currentCastCoroutine then
-        pcall(function()
-            coroutine.close(currentCastCoroutine)
-        end)
-        currentCastCoroutine = nil
-    end
     
     if connection then
         connection:Disconnect()
         connection = nil
+    end
+    
+    if spamConnection then
+        spamConnection:Disconnect()
+        spamConnection = nil
     end
     
     if fishObtainedConnection then
@@ -149,12 +150,7 @@ function AutoFishFeature:Stop()
         fishObtainedConnection = nil
     end
     
-    if textEffectConnection then
-        textEffectConnection:Disconnect()
-        textEffectConnection = nil
-    end
-    
-    logger:info("Stopped")
+    logger:info("Stopped SPAM method")
 end
 
 -- Setup fish obtained notification listener
@@ -164,140 +160,84 @@ function AutoFishFeature:SetupFishObtainedListener()
         return
     end
     
+    -- Disconnect existing connection if any
     if fishObtainedConnection then
         fishObtainedConnection:Disconnect()
     end
     
     fishObtainedConnection = FishObtainedNotification.OnClientEvent:Connect(function(...)
         if isRunning then
-            logger:info("Fish caught! Stopping current cycle...")
+            logger:info("Fish obtained notification received!")
             fishCaughtFlag = true
-            waitingForCompletion = false
-            fishingInProgress = false
             
-            -- Stop current cast coroutine if running
-            if currentCastCoroutine then
-                pcall(function()
-                    coroutine.close(currentCastCoroutine)
-                end)
-                currentCastCoroutine = nil
+            -- Stop current spam immediately
+            if spamActive then
+                spamActive = false
+                completionCheckActive = false
             end
             
+            -- Reset fishing state for next cycle (fast restart)
             spawn(function()
-                task.wait(2.5)
-                
-                if not isRunning then return end
-                
-                fishCaughtFlag = false
-                textEffectReceived = false
-                waitingForCompletion = false
+                task.wait(0.1) -- Small delay for stability
                 fishingInProgress = false
-                logger:info("Starting next cycle after cooldown...")
+                fishCaughtFlag = false
+                logger:info("Ready for next cycle (fast restart)")
             end)
         end
     end)
     
-    logger:info("Fish obtained listener ready")
+    logger:info("Fish obtained listener setup complete")
 end
 
--- Setup text effect listener
-function AutoFishFeature:SetupTextEffectListener()
-    local ReplicateTextEffect = _G.ReplicateTextEffect
-    if not ReplicateTextEffect then
-        logger:warn("ReplicateTextEffect not available")
-        return
-    end
-    
-    if textEffectConnection then
-        textEffectConnection:Disconnect()
-    end
-    
-    textEffectConnection = ReplicateTextEffect.OnClientEvent:Connect(function(data)
-        if not isRunning or not waitingForCompletion then return end
-        
-        if not data or not data.TextData then return end
-        if not LocalPlayer.Character or not LocalPlayer.Character.Head then return end
-        if data.TextData.AttachTo ~= LocalPlayer.Character.Head then return end
-        
-        logger:info("Text effect detected!")
-        textEffectReceived = true
-        
-        -- Trigger completion after delay
-        local config = FISHING_CONFIGS[currentMode]
-        spawn(function()
-            logger:info("Waiting", config.completionDelay, "seconds before firing completion...")
-            task.wait(config.completionDelay)
-            
-            if not isRunning or fishCaughtFlag then
-                logger:info("Cancelled - fish already caught or stopped")
-                return
-            end
-            
-            logger:info("Firing completion NOW!")
-            self:FireCompletion()
-        end)
-    end)
-    
-    logger:info("Text effect listener ready")
-end
-
--- Main fishing loop
-function AutoFishFeature:FishingLoop()
-    if fishingInProgress or waitingForCompletion or fishCaughtFlag then return end
+-- Main spam-based fishing loop
+function AutoFishFeature:SpamFishingLoop()
+    if fishingInProgress or spamActive then return end
     
     local currentTime = tick()
     local config = FISHING_CONFIGS[currentMode]
     
+    -- Wait between cycles
     if currentTime - lastFishTime < config.waitBetween then
         return
     end
     
+    -- Start fishing sequence
     fishingInProgress = true
     lastFishTime = currentTime
     
-    currentCastCoroutine = coroutine.create(function()
-        local success = self:ExecuteFishingSequence()
-        
-        if not fishCaughtFlag then
-            fishingInProgress = false
-        end
+    spawn(function()
+        local success = self:ExecuteSpamFishingSequence()
+        fishingInProgress = false
         
         if success then
-            logger:info("Waiting for text effect...")
+            logger:info("SPAM cycle completed!")
         end
     end)
-    
-    coroutine.resume(currentCastCoroutine)
 end
 
--- Execute fishing sequence
-function AutoFishFeature:ExecuteFishingSequence()
-    if fishCaughtFlag then return false end
-    
+-- Execute spam-based fishing sequence
+function AutoFishFeature:ExecuteSpamFishingSequence()
     local config = FISHING_CONFIGS[currentMode]
     
+    -- Step 1: Equip rod
     if not self:EquipRod(config.rodSlot) then
         return false
     end
     
     task.wait(0.1)
-    if fishCaughtFlag then return false end
 
+    -- Step 2: Charge rod
     if not self:ChargeRod(config.chargeTime) then
         return false
     end
     
-    if fishCaughtFlag then return false end
-    
+    -- Step 3: Cast rod
     if not self:CastRod() then
         return false
     end
 
-    if fishCaughtFlag then return false end
-    
-    -- Mark as waiting for text effect
-    textEffectReceived = false
-    waitingForCompletion = true
+    -- Step 4: Start completion spam with mode-specific behavior
+    self:StartCompletionSpam(config.spamDelay, config.maxSpamTime)
     
     return true
 end
@@ -318,8 +258,8 @@ function AutoFishFeature:ChargeRod(chargeTime)
     if not ChargeFishingRod then return false end
     
     local success = pcall(function()
-        local timestamp = tick() * 1000
-        return ChargeFishingRod:InvokeServer(nil, nil, nil, timestamp)
+        local chargeValue = tick() + (chargeTime * 1000)
+        return ChargeFishingRod:InvokeServer(chargeValue)
     end)
     
     return success
@@ -330,16 +270,69 @@ function AutoFishFeature:CastRod()
     if not RequestFishing then return false end
     
     local success = pcall(function()
-        local x = -1.2331848144531
-        local z = 0.99277655860847
-        local timestamp = tick() * 1000
-        return RequestFishing:InvokeServer(x, z, timestamp)
+        local x = -1.233184814453125
+        local z = 0.9999120558411321
+        return RequestFishing:InvokeServer(x, z)
     end)
     
     return success
 end
 
--- Fire FishingCompleted (only once!)
+-- Start spamming FishingCompleted with mode-specific behavior
+function AutoFishFeature:StartCompletionSpam(delay, maxTime)
+    if spamActive then return end
+    
+    spamActive = true
+    completionCheckActive = true
+    fishCaughtFlag = false
+    local spamStartTime = tick()
+    local config = FISHING_CONFIGS[currentMode]
+    
+    logger:info("Starting completion SPAM - Mode:", currentMode)
+    
+    -- Update backpack count before spam
+    self:UpdateBackpackCount()
+    
+    spawn(function()
+        -- Mode-specific behavior
+        if currentMode == "Slow" and not config.skipMinigame then
+            -- Slow mode: Wait for minigame animation
+            logger:info("Slow mode: Playing minigame animation for", config.minigameDuration, "seconds")
+            task.wait(config.minigameDuration)
+            
+            -- Check if fish was already caught during animation
+            if fishCaughtFlag or not isRunning or not spamActive then
+                spamActive = false
+                completionCheckActive = false
+                return
+            end
+        end
+        
+        -- Start spamming (for both modes, but Slow starts after minigame delay)
+        while spamActive and isRunning and (tick() - spamStartTime) < maxTime do
+            -- Fire completion
+            local fired = self:FireCompletion()
+            
+            -- Check if fishing completed using notification listener OR backpack method
+            if fishCaughtFlag or self:CheckFishingCompleted() then
+                logger:info("Fish caught detected!")
+                break
+            end
+            
+            task.wait(delay)
+        end
+        
+        -- Stop spam
+        spamActive = false
+        completionCheckActive = false
+        
+        if (tick() - spamStartTime) >= maxTime then
+            logger:info("SPAM timeout after", maxTime, "seconds")
+        end
+    end)
+end
+
+-- Fire FishingCompleted
 function AutoFishFeature:FireCompletion()
     if not FishingCompleted then return false end
     
@@ -347,13 +340,57 @@ function AutoFishFeature:FireCompletion()
         FishingCompleted:FireServer()
     end)
     
-    if success then
-        logger:info("FishingCompleted fired successfully!")
-    else
-        logger:warn("Failed to fire FishingCompleted")
+    return success
+end
+
+-- Check if fishing completed successfully (fallback method)
+function AutoFishFeature:CheckFishingCompleted()
+    -- Primary method: notification listener flag
+    if fishCaughtFlag then
+        return true
     end
     
-    return success
+    -- Fallback method: Check backpack item count increase
+    local currentCount = self:GetBackpackItemCount()
+    if currentCount > lastBackpackCount then
+        lastBackpackCount = currentCount
+        return true
+    end
+    
+    -- Method 3: Check character tool state
+    if LocalPlayer.Character then
+        local tool = LocalPlayer.Character:FindFirstChildOfClass("Tool")
+        if not tool then
+            -- Tool unequipped = fishing might be done
+            return false -- Don't rely on this alone
+        end
+    end
+    
+    return false
+end
+
+-- Update backpack count
+function AutoFishFeature:UpdateBackpackCount()
+    lastBackpackCount = self:GetBackpackItemCount()
+end
+
+-- Get current backpack item count
+function AutoFishFeature:GetBackpackItemCount()
+    local count = 0
+    
+    if LocalPlayer.Backpack then
+        count = count + #LocalPlayer.Backpack:GetChildren()
+    end
+    
+    if LocalPlayer.Character then
+        for _, child in pairs(LocalPlayer.Character:GetChildren()) do
+            if child:IsA("Tool") then
+                count = count + 1
+            end
+        end
+    end
+    
+    return count
 end
 
 -- Get status
@@ -362,13 +399,12 @@ function AutoFishFeature:GetStatus()
         running = isRunning,
         mode = currentMode,
         inProgress = fishingInProgress,
-        waitingForCompletion = waitingForCompletion,
-        textEffectReceived = textEffectReceived,
-        fishCaughtFlag = fishCaughtFlag,
+        spamming = spamActive,
         lastCatch = lastFishTime,
+        backpackCount = lastBackpackCount,
+        fishCaughtFlag = fishCaughtFlag,
         remotesReady = remotesInitialized,
-        fishListenerReady = fishObtainedConnection ~= nil,
-        textEffectListenerReady = textEffectConnection ~= nil
+        listenerReady = fishObtainedConnection ~= nil
     }
 end
 
@@ -377,7 +413,11 @@ function AutoFishFeature:SetMode(mode)
     if FISHING_CONFIGS[mode] then
         currentMode = mode
         logger:info("Mode changed to:", mode)
-        logger:info("  - Completion delay:", FISHING_CONFIGS[mode].completionDelay, "seconds")
+        if mode == "Fast" then
+            logger:info("  - Skip minigame: ON")
+        elseif mode == "Slow" then  
+            logger:info("  - Skip minigame: OFF (", FISHING_CONFIGS[mode].minigameDuration, "s animation)")
+        end
         return true
     end
     return false
@@ -387,18 +427,14 @@ end
 function AutoFishFeature:GetNotificationInfo()
     return {
         hasNotificationRemote = FishObtainedNotification ~= nil,
-        hasTextEffectRemote = _G.ReplicateTextEffect ~= nil,
-        fishListenerConnected = fishObtainedConnection ~= nil,
-        textEffectListenerConnected = textEffectConnection ~= nil,
-        fishCaughtFlag = fishCaughtFlag,
-        textEffectReceived = textEffectReceived,
-        waitingForCompletion = waitingForCompletion
+        listenerConnected = fishObtainedConnection ~= nil,
+        fishCaughtFlag = fishCaughtFlag
     }
 end
 
 -- Cleanup
 function AutoFishFeature:Cleanup()
-    logger:info("Cleaning up...")
+    logger:info("Cleaning up SPAM method...")
     self:Stop()
     controls = {}
     remotesInitialized = false
