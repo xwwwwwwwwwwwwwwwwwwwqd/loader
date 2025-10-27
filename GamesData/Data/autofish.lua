@@ -70,13 +70,13 @@ local FISHING_CONFIGS = {
         chargeTime = 1.0,
         waitBetween = 0,
         rodSlot = 1,
-        completionDelay = 1.2  -- Delay setelah text effect (seconds)
+        completionDelay = 2.0  -- Delay setelah text effect (seconds)
     },
     ["Slow"] = {
         chargeTime = 1.0,
         waitBetween = 1,
         rodSlot = 1,
-        completionDelay = 1.2  -- Delay setelah text effect (seconds)
+        completionDelay = 2.0  -- Delay setelah text effect (seconds)
     }
 }
 
