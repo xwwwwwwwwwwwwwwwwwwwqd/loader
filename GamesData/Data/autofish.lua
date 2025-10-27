@@ -184,7 +184,7 @@ function AutoFishFeature:SetupFishObtainedListener()
             end
             
             spawn(function()
-                task.wait(2.5)
+                task.wait(1.3)
                 
                 if not isRunning then return end
                 
@@ -318,8 +318,8 @@ function AutoFishFeature:ChargeRod(chargeTime)
     if not ChargeFishingRod then return false end
     
     local success = pcall(function()
-        local timestamp = tick() * 1000
-        return ChargeFishingRod:InvokeServer(nil, nil, nil, timestamp)
+        local serverTime = workspace:GetServerTimeNow()
+        return ChargeFishingRod:InvokeServer(nil, nil, nil, serverTime)
     end)
     
     return success
@@ -332,8 +332,8 @@ function AutoFishFeature:CastRod()
     local success = pcall(function()
         local x = -1.2331848144531
         local z = 0.99277655860847
-        local timestamp = tick() * 1000
-        return RequestFishing:InvokeServer(x, z, timestamp)
+        local serverTime = workspace:GetServerTimeNow()
+        return RequestFishing:InvokeServer(x, z, serverTime)
     end)
     
     return success
