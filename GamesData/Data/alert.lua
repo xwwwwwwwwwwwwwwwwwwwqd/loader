@@ -19,10 +19,10 @@ return function(Window, Tabs)
         Content = [[
 This script is still under development!
 There is a possibility it may get detected if used in public servers!
-If you have suggestions or found bugs, please report them to <font color="rgba(217, 0, 255, 1)">Discord Nemesis X</font>!<br/>
+If you have suggestions or found bugs, please report them to <font color="rgb(0,170,255)">Discord Nemesis X</font>!<br/>
 <b>Use at your own risk!</b>
 ]],
-        Icon = "water"
+        Icon = "star"
     })
 
     InfoSection:AddParagraph({
