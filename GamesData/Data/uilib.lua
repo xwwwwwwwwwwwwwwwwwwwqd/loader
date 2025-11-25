@@ -473,7 +473,7 @@ function Chloex:Window(GuiConfig)
     GuiConfig              = GuiConfig or {}
     GuiConfig.Title        = GuiConfig.Title or "Nemesis X"
     GuiConfig.Footer       = GuiConfig.Footer or "Nemesise :3"
-    GuiConfig.Color        = GuiConfig.Color or Color3.fromRGB(255, 0, 255)
+    GuiConfig.Color        = GuiConfig.Color or Color3.fromRGB(150, 70, 230)
     GuiConfig["Tab Width"] = GuiConfig["Tab Width"] or 120
     GuiConfig.Version      = GuiConfig.Version or 1
 
