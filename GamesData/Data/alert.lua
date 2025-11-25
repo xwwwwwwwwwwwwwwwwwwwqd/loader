@@ -15,20 +15,18 @@ return function(Window, Tabs)
     local InfoSection = Tabs.Info:AddSection("Nemesis X Information", true)
 
     InfoSection:AddParagraph({
-        Title = "Nemesis X Alert!",
+        Title = "Nemesis Announcements!",
         Content = [[
 This script is still under development!
 There is a possibility it may get detected if used in public servers!
-If you have suggestions or found bugs, please report them to <font color="rgb(0,170,255)">Discord Nemesis X</font>!<br/>
+If you have suggestions or found bugs, please report them to <font color="rgb(0,170,255)">Discord Nemesis</font>!<br/>
 <b>Use at your own risk!</b>
 ]],
-        Icon = "star"
     })
 
     InfoSection:AddParagraph({
-        Title = "Nemesis X Discord",
+        Title = "Nemesis Discord",
         Content = "Official link discord Nemesis X!",
-        Icon = "discord",
         ButtonText = "COPY LINK DISCORD",
         ButtonCallback = function()
             if setclipboard then
@@ -757,3 +755,4 @@ If you have suggestions or found bugs, please report them to <font color="rgb(0,
         VirtualUser:ClickButton2(Vector2.new())
     end)
 end
+
