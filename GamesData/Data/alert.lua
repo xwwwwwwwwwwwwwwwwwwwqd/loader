@@ -32,7 +32,7 @@ If you have suggestions or found bugs, please report them to <font color="rgba(2
         ButtonText = "COPY LINK DISCORD",
         ButtonCallback = function()
             if setclipboard then
-                setclipboard("https://discord.com/invite/PaPvGUE8UC")
+                setclipboard("https://discord.gg/3d4yfAsKSa")
                 chloex("Succesfully copied link!")
             end
         end
