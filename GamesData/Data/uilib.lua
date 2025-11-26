@@ -463,7 +463,7 @@ end
 
 function nemesis(msg, delay, color, title, desc)
     return Nemesis:MakeNotify({
-        Title = title or "Nemesis X",
+        Title = title or "Nemesis",
         Description = desc or "Notification",
         Content = msg or "Content",
         Color = color or Color3.fromRGB(160, 32, 240),
@@ -473,7 +473,7 @@ end
 
 function Nemesis:Window(GuiConfig)
     GuiConfig              = GuiConfig or {}
-    GuiConfig.Title        = GuiConfig.Title or "Nemesis X"
+    GuiConfig.Title        = GuiConfig.Title or "Nemesis"
     GuiConfig.Footer       = GuiConfig.Footer or "Nemesise :3"
     GuiConfig.Color        = GuiConfig.Color or Color3.fromRGB(150, 70, 230)
     GuiConfig["Tab Width"] = GuiConfig["Tab Width"] or 120
@@ -801,71 +801,69 @@ function Nemesis:Window(GuiConfig)
         })
         Gradient.Rotation = 90
         Gradient.Parent = DialogGlow
-
         local Title = Instance.new("TextLabel")
-        Title.Size = UDim2.new(1, 0, 0, 40)
-        Title.Position = UDim2.new(0, 0, 0, 4)
-        Title.BackgroundTransparency = 1
-        Title.Font = Enum.Font.GothamBold
-        Title.Text = "Are you sure?"
-        Title.TextSize = 22
-        Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-        Title.ZIndex = 52
-        Title.Parent = Dialog
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.Position = UDim2.new(0, 0, 0, 4)
+Title.BackgroundTransparency = 1
+Title.Font = Enum.Font.GothamBold
+Title.Text = "Are you sure?"
+Title.TextSize = 22
+Title.TextColor3 = Color3.fromRGB(255, 255, 255) -- White (unchanged)
+Title.ZIndex = 52
+Title.Parent = Dialog
 
-        local Message = Instance.new("TextLabel")
-        Message.Size = UDim2.new(1, -20, 0, 60)
-        Message.Position = UDim2.new(0, 10, 0, 30)
-        Message.BackgroundTransparency = 1
-        Message.Font = Enum.Font.Gotham
-        Message.Text = "Do you want to close this window?\nYou will not be able to open it again"
-        Message.TextSize = 14
-        Message.TextColor3 = Color3.fromRGB(200, 200, 200)
-        Message.TextWrapped = true
-        Message.ZIndex = 52
-        Message.Parent = Dialog
+local Message = Instance.new("TextLabel")
+Message.Size = UDim2.new(1, -20, 0, 60)
+Message.Position = UDim2.new(0, 10, 0, 30)
+Message.BackgroundTransparency = 1
+Message.Font = Enum.Font.Gotham
+Message.Text = "Do you want to close this window?\nYou will not be able to open it again"
+Message.TextSize = 14
+Message.TextColor3 = Color3.fromRGB(200, 200, 200) -- Light gray (unchanged)
+Message.TextWrapped = true
+Message.ZIndex = 52
+Message.Parent = Dialog
 
-        local Yes = Instance.new("TextButton")
-        Yes.Size = UDim2.new(0.45, -10, 0, 35)
-        Yes.Position = UDim2.new(0.05, 0, 1, -55)
-        Yes.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        Yes.BackgroundTransparency = 0.935
-        Yes.Text = "Yes"
-        Yes.Font = Enum.Font.GothamBold
-        Yes.TextSize = 15
-        Yes.TextColor3 = Color3.fromRGB(255, 255, 255)
-        Yes.TextTransparency = 0.3
-        Yes.ZIndex = 52
-        Yes.Name = "Yes"
-        Yes.Parent = Dialog
-        Instance.new("UICorner", Yes).CornerRadius = UDim.new(0, 6)
+local Yes = Instance.new("TextButton")
+Yes.Size = UDim2.new(0.45, -10, 0, 35)
+Yes.Position = UDim2.new(0.05, 0, 1, -55)
+Yes.BackgroundColor3 = Color3.fromRGB(128, 0, 128) -- Changed to purple
+Yes.BackgroundTransparency = 0.935
+Yes.Text = "Yes"
+Yes.Font = Enum.Font.GothamBold
+Yes.TextSize = 15
+Yes.TextColor3 = Color3.fromRGB(255, 255, 255) -- White (unchanged)
+Yes.TextTransparency = 0.3
+Yes.ZIndex = 52
+Yes.Name = "Yes"
+Yes.Parent = Dialog
+Instance.new("UICorner", Yes).CornerRadius = UDim.new(0, 6)
 
-        local Cancel = Instance.new("TextButton")
-        Cancel.Size = UDim2.new(0.45, -10, 0, 35)
-        Cancel.Position = UDim2.new(0.5, 10, 1, -55)
-        Cancel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        Cancel.BackgroundTransparency = 0.935
-        Cancel.Text = "Cancel"
-        Cancel.Font = Enum.Font.GothamBold
-        Cancel.TextSize = 15
-        Cancel.TextColor3 = Color3.fromRGB(255, 255, 255)
-        Cancel.TextTransparency = 0.3
-        Cancel.ZIndex = 52
-        Cancel.Name = "Cancel"
-        Cancel.Parent = Dialog
-        Instance.new("UICorner", Cancel).CornerRadius = UDim.new(0, 6)
+local Cancel = Instance.new("TextButton")
+Cancel.Size = UDim2.new(0.45, -10, 0, 35)
+Cancel.Position = UDim2.new(0.5, 10, 1, -55)
+Cancel.BackgroundColor3 = Color3.fromRGB(128, 0, 128) -- Changed to purple
+Cancel.BackgroundTransparency = 0.935
+Cancel.Text = "Cancel"
+Cancel.Font = Enum.Font.GothamBold
+Cancel.TextSize = 15
+Cancel.TextColor3 = Color3.fromRGB(255, 255, 255) -- White (unchanged)
+Cancel.TextTransparency = 0.3
+Cancel.ZIndex = 52
+Cancel.Name = "Cancel"
+Cancel.Parent = Dialog
+Instance.new("UICorner", Cancel).CornerRadius = UDim.new(0, 6)
 
-        Yes.MouseButton1Click:Connect(function()
-            if Nemesis then Nemesis:Destroy() end
-            if game.CoreGui:FindFirstChild("ToggleUIButton") then
-                game.CoreGui.ToggleUIButton:Destroy()
-            end
-        end)
+Yes.MouseButton1Click:Connect(function()
+    if Nemesis then Nemesis:Destroy() end
+    if game.CoreGui:FindFirstChild("ToggleUIButton") then
+        game.CoreGui.ToggleUIButton:Destroy()
+    end
+end)
 
-        Cancel.MouseButton1Click:Connect(function()
-            Overlay:Destroy()
-        end)
-    end)
+Cancel.MouseButton1Click:Connect(function()
+    Overlay:Destroy()
+end)
 
     local ToggleKey = Enum.KeyCode.F3
     UserInputService.InputBegan:Connect(function(input, gpe)
