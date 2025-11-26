@@ -28,7 +28,7 @@ If you encounter bugs or have feedback, feel free to share it through
 
     InfoSection:AddParagraph({
         Title = "Nemesis Discord",
-        Content = "Official link discord Nemesis X!",
+        Content = "Official link discord Nemesis Hub!",
         ButtonText = "COPY LINK DISCORD",
         ButtonCallback = function()
             if setclipboard then
@@ -757,5 +757,6 @@ If you encounter bugs or have feedback, feel free to share it through
         VirtualUser:ClickButton2(Vector2.new())
     end)
 end
+
 
 
