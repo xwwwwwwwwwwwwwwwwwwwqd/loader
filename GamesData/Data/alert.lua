@@ -14,15 +14,17 @@ return function(Window, Tabs)
 
     local InfoSection = Tabs.Info:AddSection("Nemesis X Information", true)
 
-    InfoSection:AddParagraph({
-        Title = "Nemesis Announcements!",
-        Content = [[
-This script is still under development!
-There is a possibility it may get detected if used in public servers!
-If you have suggestions or found bugs, please report them to <font color="rgb(0,170,255)">Discord Nemesis</font>!<br/>
-<b>Use at your own risk!</b>
+InfoSection:AddParagraph({
+    Title = "Nemesis Announcements!",
+    Content = [[ 
+Development is ongoing, and there is a chance of detection when used in public servers. 
+If you encounter bugs or have feedback, feel free to share it through 
+<font color="rgb(0,170,255)">Discord Nemesis</font>!
+<br/>
+<b>Use responsibly.</b>
 ]],
-    })
+})
+
 
     InfoSection:AddParagraph({
         Title = "Nemesis Discord",
@@ -755,4 +757,5 @@ If you have suggestions or found bugs, please report them to <font color="rgb(0,
         VirtualUser:ClickButton2(Vector2.new())
     end)
 end
+
 
