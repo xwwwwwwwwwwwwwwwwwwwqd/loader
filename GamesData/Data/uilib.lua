@@ -1,17 +1,17 @@
 local HttpService = game:GetService("HttpService")
 
-if not isfolder("Chloe X") then
-    makefolder("Chloe X")
+if not isfolder("NemesisHub") then
+    makefolder("NemesisHub")
 end
-if not isfolder("Chloe X/Config") then
-    makefolder("Chloe X/Config")
+if not isfolder("NemesisHub/Config") then
+    makefolder("NemesisHub/Config")
 end
 
 local gameName   = tostring(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name)
 gameName         = gameName:gsub("[^%w_ ]", "")
 gameName         = gameName:gsub("%s+", "_")
 
-local ConfigFile = "Chloe X/Config/Chloe_" .. gameName .. ".json"
+local ConfigFile = "NemesisHub/Config/NemesisHub_" .. gameName .. ".json"
 
 ConfigData       = {}
 Elements         = {}
@@ -260,8 +260,8 @@ function CircleClick(Button, X, Y)
     end)
 end
 
-local Chloex = {}
-function Chloex:MakeNotify(NotifyConfig)
+local Nemesis = {}
+function Nemesis:MakeNotify(NotifyConfig)
     local NotifyConfig = NotifyConfig or {}
     NotifyConfig.Title = NotifyConfig.Title or "Nemesis X"
     NotifyConfig.Description = NotifyConfig.Description or "Notification"
@@ -459,8 +459,8 @@ function Chloex:MakeNotify(NotifyConfig)
     return NotifyFunction
 end
 
-function chloex(msg, delay, color, title, desc)
-    return Chloex:MakeNotify({
+function nemesis(msg, delay, color, title, desc)
+    return Nemesis:MakeNotify({
         Title = title or "Nemesis X",
         Description = desc or "Notification",
         Content = msg or "Content",
@@ -469,7 +469,7 @@ function chloex(msg, delay, color, title, desc)
     })
 end
 
-function Chloex:Window(GuiConfig)
+function Nemesis:Window(GuiConfig)
     GuiConfig              = GuiConfig or {}
     GuiConfig.Title        = GuiConfig.Title or "Nemesis X"
     GuiConfig.Footer       = GuiConfig.Footer or "Nemesise :3"
@@ -482,7 +482,7 @@ function Chloex:Window(GuiConfig)
 
     local GuiFunc = {}
 
-    local Chloeex = Instance.new("ScreenGui");
+    local Nemesis = Instance.new("ScreenGui");
     local DropShadowHolder = Instance.new("Frame");
     local DropShadow = Instance.new("ImageLabel");
     local Main = Instance.new("Frame");
@@ -505,10 +505,10 @@ function Chloex:Window(GuiConfig)
     local LayersFolder = Instance.new("Folder");
     local LayersPageLayout = Instance.new("UIPageLayout");
 
-    Chloeex.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    Chloeex.Name = "Chloeex"
-    Chloeex.ResetOnSpawn = false
-    Chloeex.Parent = game:GetService("CoreGui")
+    Nemesis.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    Nemesis.Name = "Nemesis"
+    Nemesis.ResetOnSpawn = false
+    Nemesis.Parent = game:GetService("CoreGui")
 
     DropShadowHolder.BackgroundTransparency = 1
     DropShadowHolder.BorderSizePixel = 0
@@ -521,10 +521,10 @@ function Chloex:Window(GuiConfig)
     end
     DropShadowHolder.ZIndex = 0
     DropShadowHolder.Name = "DropShadowHolder"
-    DropShadowHolder.Parent = Chloeex
+    DropShadowHolder.Parent = Nemesis
 
-    DropShadowHolder.Position = UDim2.new(0, (Chloeex.AbsoluteSize.X // 2 - DropShadowHolder.Size.X.Offset // 2), 0,
-        (Chloeex.AbsoluteSize.Y // 2 - DropShadowHolder.Size.Y.Offset // 2))
+    DropShadowHolder.Position = UDim2.new(0, (Nemesis.AbsoluteSize.X // 2 - DropShadowHolder.Size.X.Offset // 2), 0,
+        (Nemesis.AbsoluteSize.Y // 2 - DropShadowHolder.Size.Y.Offset // 2))
     DropShadow.Image = "rbxassetid://6015897843"
     DropShadow.ImageColor3 = Color3.fromRGB(15, 15, 15)
     DropShadow.ImageTransparency = 1
@@ -747,8 +747,8 @@ function Chloex:Window(GuiConfig)
     ScrollTab.ChildRemoved:Connect(UpdateSize1)
 
     function GuiFunc:DestroyGui()
-        if CoreGui:FindFirstChild("Chloeex") then
-            Chloeex:Destroy()
+        if CoreGui:FindFirstChild("Nemesis") then
+            Nemesis:Destroy()
         end
     end
 
@@ -854,7 +854,7 @@ function Chloex:Window(GuiConfig)
         Instance.new("UICorner", Cancel).CornerRadius = UDim.new(0, 6)
 
         Yes.MouseButton1Click:Connect(function()
-            if Chloeex then Chloeex:Destroy() end
+            if Nemesis then Nemesis:Destroy() end
             if game.CoreGui:FindFirstChild("ToggleUIButton") then
                 game.CoreGui.ToggleUIButton:Destroy()
             end
@@ -1118,7 +1118,7 @@ function Chloex:Window(GuiConfig)
         TabButton.Parent = Tab
 
         TabName.Font = Enum.Font.GothamBold
-        TabName.Text = "| " .. tostring(TabConfig.Name)
+        TabName.Text = "╏ " .. tostring(TabConfig.Name)
         TabName.TextColor3 = Color3.fromRGB(255, 255, 255)
         TabName.TextSize = 13
         TabName.TextXAlignment = Enum.TextXAlignment.Left
@@ -2706,4 +2706,4 @@ function Chloex:Window(GuiConfig)
     return Tabs
 end
 
-return Chloex
+return Nemesis
