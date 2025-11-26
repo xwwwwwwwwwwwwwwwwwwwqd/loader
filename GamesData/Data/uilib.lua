@@ -467,7 +467,6 @@ function nemesis(msg, delay, color, title, desc)
         Description = desc or "Notification",
         Content = msg or "Content",
         Color = color or Color3.fromRGB(160, 32, 240),
-
         Delay = delay or 4
     })
 end
