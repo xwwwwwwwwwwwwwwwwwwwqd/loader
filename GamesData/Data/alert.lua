@@ -12,23 +12,24 @@ return function(Window, Tabs)
     local jobId = game.JobId
     local privateServerId = game.PrivateServerId
 
-    local InfoSection = Tabs.Info:AddSection("Nemesis X Information", true)
+    local InfoSection = Tabs.Info:AddSection("Nemesis Announcements", true)
 
     InfoSection:AddParagraph({
         Title = "Nemesis X Alert!",
         Content = [[
-This script is still under development!
-There is a possibility it may get detected if used in public servers!
-If you have suggestions or found bugs, please report them to <font color="rgb(0,170,255)">Discord Nemesis X</font>!<br/>
-<b>Use at your own risk!</b>
+This script is designed to enhance your gameplay experience!
+While it has been carefully optimized, detection is always a possibility in public servers.
+
+If you have suggestions or encounter any issues, feel free to contact
+<font color="rgb(0,170,255)">Discord Nemesis X</font>!
+
+<b>Use responsibly and enjoy the features!</b>
 ]],
-        Icon = "star"
     })
 
     InfoSection:AddParagraph({
-        Title = "Nemesis X Discord",
-        Content = "Official link discord Nemesis X!",
-        Icon = "discord",
+        Title = "Nemesis Discord",
+        Content = "Official link discord Nemesis!",
         ButtonText = "COPY LINK DISCORD",
         ButtonCallback = function()
             if setclipboard then
