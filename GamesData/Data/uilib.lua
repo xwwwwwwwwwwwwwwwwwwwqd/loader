@@ -574,6 +574,7 @@ function Nemesis:Window(GuiConfig)
     TextLabel.Font = Enum.Font.GothamBold
     TextLabel.Text = GuiConfig.Title
     TextLabel.TextColor3 = GuiConfig.Color
+    TextLabel.RichText = true
     TextLabel.TextSize = 14
     TextLabel.TextXAlignment = Enum.TextXAlignment.Left
     TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -589,6 +590,7 @@ function Nemesis:Window(GuiConfig)
     TextLabel1.Font = Enum.Font.GothamBold
     TextLabel1.Text = GuiConfig.Footer
     TextLabel1.TextColor3 = GuiConfig.Color
+    TextLabel.RichText = true
     TextLabel1.TextSize = 14
     TextLabel1.TextXAlignment = Enum.TextXAlignment.Left
     TextLabel1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
