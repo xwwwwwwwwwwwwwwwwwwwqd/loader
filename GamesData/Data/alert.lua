@@ -14,26 +14,26 @@ return function(Window, Tabs)
 
     local InfoSection = Tabs.Info:AddSection("Nemesis X Information", true)
 
-InfoSection:AddParagraph({
-    Title = "Nemesis Announcements!",
-    Content = [[ 
-Development is ongoing, and there is a chance of detection when used in public servers. 
-If you encounter bugs or have feedback, feel free to share it through 
-<font color="rgb(0,170,255)">Discord Nemesis</font>!
-<br/>
-<b>Use responsibly.</b>
+    InfoSection:AddParagraph({
+        Title = "Nemesis X Alert!",
+        Content = [[
+This script is still under development!
+There is a possibility it may get detected if used in public servers!
+If you have suggestions or found bugs, please report them to <font color="rgb(0,170,255)">Discord Nemesis X</font>!<br/>
+<b>Use at your own risk!</b>
 ]],
-})
-
+        Icon = "star"
+    })
 
     InfoSection:AddParagraph({
-        Title = "Nemesis Discord",
-        Content = "Official link discord Nemesis Hub!",
+        Title = "Nemesis X Discord",
+        Content = "Official link discord Nemesis X!",
+        Icon = "discord",
         ButtonText = "COPY LINK DISCORD",
         ButtonCallback = function()
             if setclipboard then
                 setclipboard("https://discord.gg/3d4yfAsKSa")
-                chloex("Succesfully copied link!")
+                nemesis("Succesfully copied link!")
             end
         end
     })
@@ -54,7 +54,7 @@ If you encounter bugs or have feedback, feel free to share it through
         ButtonCallback = function()
             if setclipboard then
                 setclipboard(currentJobId)
-                chloex("Succesfully Copied!")
+                nemesis("Succesfully Copied!")
             end
         end,
         SubButtonText = "Rejoin",
@@ -79,7 +79,7 @@ If you encounter bugs or have feedback, feel free to share it through
                 local realJobId = InputJobId:gsub("^CHX%-", "")
                 TeleportService:TeleportToPlaceInstance(placeId, realJobId, LocalPlayer)
             else
-                chloex("Input Job Id!")
+                nemesis("Input Job Id!")
             end
         end
     })
@@ -114,7 +114,7 @@ If you encounter bugs or have feedback, feel free to share it through
                 if LowestServer then
                     TeleportService:TeleportToPlaceInstance(placeId, LowestServer, LocalPlayer)
                 else
-                    chloex("No other server found.")
+                    nemesis("No other server found.")
                 end
             end)
         end,
@@ -145,7 +145,7 @@ If you encounter bugs or have feedback, feel free to share it through
                     local randomServer = Servers[math.random(1, #Servers)]
                     TeleportService:TeleportToPlaceInstance(placeId, randomServer, LocalPlayer)
                 else
-                    chloex("No available server found!")
+                    nemesis("No available server found!")
                 end
             end)
         end
@@ -161,101 +161,6 @@ If you encounter bugs or have feedback, feel free to share it through
             TeleportService:Teleport(game.PlaceId, LocalPlayer)
         end
     })
-
-    local MiscBooster = Tabs.Misc:AddSection("Booster FPS")
-
-    MiscBooster:AddToggle({
-        Title = "Disable 3D Render",
-        Content = "No Render Map",
-        Default = false,
-        Callback = function(state)
-            if typeof(RunService.Set3dRenderingEnabled) == "function" then
-                RunService:Set3dRenderingEnabled(not state)
-            end
-        end
-    })
-
-    local originalStates = {}
-
-    MiscBooster:AddToggle({
-        Title = "Reduce Map",
-        Content = "Fps Booster!",
-        Default = false,
-        Callback = function(value)
-            if value then
-                originalStates = {}
-                for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("BasePart") then
-                        originalStates[obj] = { Material = obj.Material, Color = obj.Color }
-                        obj.Material = Enum.Material.Plastic
-                        obj.Color = Color3.new(1, 1, 1)
-                    elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") then
-                        obj.Enabled = false
-                    elseif obj:IsA("Shirt") or obj:IsA("Pants") or obj:IsA("ShirtGraphic") or obj:IsA("Accessory") then
-                        obj.Archivable = false
-                        obj.Parent = nil
-                    end
-                end
-                if workspace:FindFirstChild("Terrain") then
-                    local t = workspace.Terrain
-                    t.WaterWaveSize, t.WaterWaveSpeed, t.WaterReflectance, t.WaterTransparency = 0, 0, 0, 0
-                end
-            else
-                for obj, data in pairs(originalStates) do
-                    if obj and obj:IsDescendantOf(workspace) then
-                        obj.Material, obj.Color = data.Material, data.Color
-                    end
-                end
-                for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("ParticleEmitter") or obj:IsA("Trail") then
-                        obj.Enabled = true
-                    end
-                end
-                if workspace:FindFirstChild("Terrain") then
-                    local t = workspace.Terrain
-                    t.WaterWaveSize, t.WaterWaveSpeed, t.WaterReflectance, t.WaterTransparency = 0.15, 10, 1, 0.3
-                end
-                originalStates = {}
-            end
-        end
-    })
-
-    MiscBooster:AddToggle({
-        Title = "Black Screen",
-        Content = "Make your screen fully black",
-        Default = false,
-        Callback = function(value)
-            local coreGui = game:GetService("CoreGui")
-            local chloeUI = coreGui:FindFirstChild("Chloeex")
-            local toggleUI = coreGui:FindFirstChild("ToggleUIButton")
-
-            if value then
-                if not coreGui:FindFirstChild("BlackScreen") then
-                    local frame = Instance.new("ScreenGui")
-                    frame.Name = "BlackScreen"
-                    frame.IgnoreGuiInset = true
-                    frame.ResetOnSpawn = false
-                    frame.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-                    frame.DisplayOrder = 0
-                    frame.Parent = coreGui
-
-                    local bg = Instance.new("Frame")
-                    bg.Size = UDim2.new(1, 0, 1, 0)
-                    bg.BackgroundColor3 = Color3.new(0, 0, 0)
-                    bg.ZIndex = 0
-                    bg.Parent = frame
-                end
-                if chloeUI then chloeUI.DisplayOrder = 10 end
-                if toggleUI then toggleUI.DisplayOrder = 11 end
-                RunService:Set3dRenderingEnabled(false)
-            else
-                local bs = coreGui:FindFirstChild("BlackScreen")
-                if bs then bs:Destroy() end
-                RunService:Set3dRenderingEnabled(true)
-            end
-        end
-    })
-
     local Misc = Tabs.Misc:AddSection("Utility Player")
     local NoclipEnabled, WalkspeedEnabled, InfJumpEnabled = false, false, false
     local WalkspeedValue = 16
@@ -726,20 +631,6 @@ If you encounter bugs or have feedback, feel free to share it through
                 end
             end
         })
-
-    SvX:AddToggle({
-        Title = "Auto Execute",
-        Default = false,
-        Callback = function(state)
-            queueEnabled = state
-            if queue_on_teleport then
-                queue_on_teleport(state and [[
-                    loadstring(game:HttpGet("https://raw.githubusercontent.com/MajestySkie/Chloe-X/main/Main/ChloeX"))()
-                ]] or "")
-            end
-        end
-    })
-
     --== Anti AFK
     local GC = getconnections or get_signal_cons
     if GC then
@@ -757,6 +648,3 @@ If you encounter bugs or have feedback, feel free to share it through
         VirtualUser:ClickButton2(Vector2.new())
     end)
 end
-
-
-
