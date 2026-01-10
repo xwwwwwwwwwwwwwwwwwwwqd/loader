@@ -1,27 +1,3 @@
-[file name]: image (1).webp
-[file content begin]
-# Vera Hub
-
-## Community Support
-- **Discount**  
-  click to copy info  
-
-### Update  
-Every time there is a game update or someone reports something, I will fix it as soon as possible.  
-
----
-
-### Info
-- **Exclusive**
-- **Main**
-- **Auto**
-- **Player**
-- **Shop**
-- **Teleport**
-- **Settings**
-
-
-[file content end]
 
 local HttpService = game:GetService("HttpService")
 
@@ -2734,3 +2710,4 @@ function Nemesis:Window(GuiConfig)
 end
 
 return Nemesis
+
