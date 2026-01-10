@@ -1,3 +1,28 @@
+[file name]: image (1).webp
+[file content begin]
+# Vera Hub
+
+## Community Support
+- **Discount**  
+  click to copy info  
+
+### Update  
+Every time there is a game update or someone reports something, I will fix it as soon as possible.  
+
+---
+
+### Info
+- **Exclusive**
+- **Main**
+- **Auto**
+- **Player**
+- **Shop**
+- **Teleport**
+- **Settings**
+
+
+[file content end]
+
 local HttpService = game:GetService("HttpService")
 
 if not isfolder("NemesisHub") then
@@ -2458,7 +2483,7 @@ function Nemesis:Window(GuiConfig)
 
                 SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
                     local query = string.lower(SearchBox.Text)
-                    for _, option in pairs(ScrollSelect:GetChildren()) do
+                    for _, option in pairs(ScrollSelect:GetChildren() do
                         if option.Name == "Option" and option:FindFirstChild("OptionText") then
                             local text = string.lower(option.OptionText.Text)
                             option.Visible = query == "" or string.find(text, query, 1, true)
