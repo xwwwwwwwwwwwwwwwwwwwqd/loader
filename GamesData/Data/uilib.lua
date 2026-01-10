@@ -1,4 +1,3 @@
-
 local HttpService = game:GetService("HttpService")
 
 if not isfolder("NemesisHub") then
@@ -2710,4 +2709,5 @@ function Nemesis:Window(GuiConfig)
 end
 
 return Nemesis
+
 
