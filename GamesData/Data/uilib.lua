@@ -1,4 +1,3 @@
-
 local HttpService = game:GetService("HttpService")
 
 if not isfolder("NemesisHub") then
@@ -2459,7 +2458,7 @@ function Nemesis:Window(GuiConfig)
 
                 SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
                     local query = string.lower(SearchBox.Text)
-                    for _, option in pairs(ScrollSelect:GetChildren() do
+                    for _, option in pairs(ScrollSelect:GetChildren()) do
                         if option.Name == "Option" and option:FindFirstChild("OptionText") then
                             local text = string.lower(option.OptionText.Text)
                             option.Visible = query == "" or string.find(text, query, 1, true)
@@ -2710,4 +2709,3 @@ function Nemesis:Window(GuiConfig)
 end
 
 return Nemesis
-
